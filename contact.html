@@ -4,13 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Contact | Portfolio</title>
+  <title>Contact</title>
 
   <link rel="stylesheet" href="css/style.css">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -18,87 +14,73 @@
 <header class="header">
 
     <div class="logo">
-        Ram Portfolio
+        RP.
     </div>
 
     <nav>
         <a href="index.html">Home</a>
         <a href="projects.html">Projects</a>
         <a href="skills.html">Skills</a>
-        <a href="contact.html" class="active">Contact</a>
+        <a href="contact.html">Contact</a>
     </nav>
 
 </header>
 
-<section class="contact-section">
+<section class="contact-page">
 
-    <div class="contact-left">
+    <div class="contact-info">
 
-        <h1>Let's Connect</h1>
+        <h1>Contact Me</h1>
 
         <p>
-            Contact me for projects, collaborations,
-            internships, or opportunities.
+            Available for collaborations, internships,
+            freelance work, and innovative projects.
         </p>
 
-        <div class="contact-links">
+        <div class="social-links">
 
             <a href="https://www.linkedin.com/in/ram-mahadev-pandhare-724492382" target="_blank">
-                LinkedIn Profile
+                LinkedIn
             </a>
 
             <a href="mailto: parammahadev21@gmail.com">
-                Send Email 
+                Email
             </a>
 
         </div>
 
     </div>
 
-    <div class="contact-right">
+    <form id="contactForm" class="contact-form">
 
-        <form id="contactForm" class="contact-form">
+        <input 
+        type="text" 
+        id="name"
+        placeholder="Your Name"
+        required>
 
-            <input 
-            type="text" 
-            id="name"
-            placeholder="Your Name"
-            required>
+        <input 
+        type="email"
+        id="email"
+        placeholder="Your Email"
+        required>
 
-            <input 
-            type="email" 
-            id="email"
-            placeholder="Your Email"
-            required>
+        <textarea
+        id="message"
+        placeholder="Your Message"
+        required></textarea>
 
-            <textarea 
-            id="message"
-            placeholder="Write Your Message..."
-            required></textarea>
+        <button type="submit">
+            Send Message
+        </button>
 
-            <button type="submit">
-                Send Message
-            </button>
-
-        </form>
-
-    </div>
+    </form>
 
 </section>
 
-<footer>
-
-    <p>
-        © 2026 Ram Mahadev Pandhare | Portfolio
-    </p>
-
-</footer>
-
-<!-- FIREBASE SCRIPT -->
-
 <script type="module">
 
-import { initializeApp } 
+import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
@@ -107,8 +89,6 @@ collection,
 addDoc
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-/* FIREBASE CONFIG */
 
 const firebaseConfig = {
   apiKey: "AIzaSyBEUaZ3a2jEjASA7tmWpaTOJod_SwbvZUg",
@@ -119,14 +99,9 @@ const firebaseConfig = {
   appId: "1:964519094829:web:f941eba4c914cf00a8e6a4",
   measurementId: "G-7PRWGR9K5K"
 };
-
-/* INITIALIZE */
-
 const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
-
-/* FORM SUBMIT */
 
 document
 .getElementById("contactForm")
@@ -144,19 +119,19 @@ document
     const message =
     document.getElementById("message").value;
 
-    try {
+    try{
 
         await addDoc(
             collection(db, "messages"),
             {
-                name: name,
-                email: email,
-                message: message,
+                name,
+                email,
+                message,
                 createdAt: new Date()
             }
         );
 
-        alert("Message Sent Successfully!");
+        alert("Message Sent!");
 
         document
         .getElementById("contactForm")
