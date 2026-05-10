@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin | Messages</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo">RP.</a>
+    <nav>
+      <a href="index.html">← Back to Portfolio</a>
+    </nav>
+  </header>
+
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="login-wrapper">
+    <div class="login-card glass-card">
+      <div class="login-icon">🔐</div>
+      <h2>Admin Access</h2>
+      <p>Enter password to view messages</p>
+      <div class="form-group">
+        <input type="password" id="admin-password" placeholder="Enter password">
+      </div>
+      <button class="btn" onclick="checkPassword()">Login</button>
+      <p id="login-error" class="login-error" style="display:none;">
+        ❌ Wrong password
+      </p>
+    </div>
+  </div>
+
+
+  <!-- MESSAGES SCREEN (hidden until login) -->
+  <div id="messages-screen" style="display:none;">
+
+    <div class="admin-hero">
+      <p class="tag">Admin Panel</p>
+      <h1>All Messages</h1>
+      <p id="msg-count" class="msg-count">Loading...</p>
+    </div>
+
+    <div class="messages-wrapper">
+      <div id="messages-list">
+        <div class="loading">⏳ Fetching messages...</div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Ram Mahadev Pandhare</p>
+  </footer>
+
+
+  <!-- PASSWORD CHECK -->
+  <script>
+    // SET YOUR PASSWORD HERE
+    const ADMIN_PASSWORD = "ram2026";
+
+    function checkPassword() {
+      const input = document.getElementById('admin-password').value;
+      if (input === ADMIN_PASSWORD) {
+        document.getElementById('login-screen').style.display  = 'none';
+        document.getElementById('messages-screen').style.display = 'block';
+        loadMessages();
+      } else {
+        document.getElementById('login-error').style.display = 'block';
+      }
+    }
+
+    // Allow Enter key
+    document.getElementById('admin-password')
+      .addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') checkPassword();
+      });
+  </script>
+
+
+  <!-- FIREBASE — LOAD ALL MESSAGES -->
+  <script type="module">
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import { getFirestore, collection, getDocs, orderBy, query, deleteDoc, doc }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEUaZ3a2jEjASA7tmWpaTOJod_SwbvZUg",
+      authDomain: "portfolio-contact-44e9b.firebaseapp.com",
+      projectId: "portfolio-contact-44e9b",
+      storageBucket: "portfolio-contact-44e9b.firebasestorage.app",
+      messagingSenderId: "964519094829",
+      appId: "1:964519094829:web:f941eba4c914cf00a8e6a4",
+      measurementId: "G-7PRWGR9K5K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    // Expose loadMessages globally
+    window.loadMessages = async () => {
+      const list    = document.getElementById('messages-list');
+      const counter = document.getElementById('msg-count');
+
+      try {
+        const q       = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+        const snap    = await getDocs(q);
+        const msgs    = snap.docs;
+
+        counter.textContent = `${msgs.length} message${msgs.length !== 1 ? 's' : ''} received`;
+
+        if (msgs.length === 0) {
+          list.innerHTML = '<div class="no-messages">📭 No messages yet.</div>';
+          return;
+        }
+
+        list.innerHTML = '';
+
+        msgs.forEach(docSnap => {
+          const d    = docSnap.data();
+          const id   = docSnap.id;
+          const date = d.createdAt?.toDate().toLocaleString('en-IN') || 'Unknown date';
+
+          const card = document.createElement('div');
+          card.className = 'message-card glass-card';
+          card.innerHTML = `
+            <div class="msg-header">
+              <div class="msg-avatar">${d.name?.charAt(0).toUpperCase() || '?'}</div>
+              <div class="msg-meta">
+                <h3>${d.name || 'No Name'}</h3>
+                <a href="mailto:${d.email}">${d.email || 'No Email'}</a>
+              </div>
+              <span class="msg-date">${date}</span>
+            </div>
+            <p class="msg-body">${d.message || 'No message'}</p>
+            <div class="msg-actions">
+              <a href="mailto:${d.email}?subject=Re: Your message&body=Hi ${d.name},"
+                 class="btn">Reply</a>
+              <button class="btn-outline delete-btn" data-id="${id}">Delete</button>
+            </div>
+          `;
+          list.appendChild(card);
+        });
+
+        // Delete buttons
+        document.querySelectorAll('.delete-btn').forEach(btn => {
+          btn.addEventListener('click', async () => {
+            const id = btn.getAttribute('data-id');
+            if (confirm('Delete this message?')) {
+              await deleteDoc(doc(db, "messages", id));
+              btn.closest('.message-card').remove();
+              const remaining = document.querySelectorAll('.message-card').length;
+              counter.textContent = `${remaining} message${remaining !== 1 ? 's' : ''} received`;
+            }
+          });
+        });
+
+      } catch (err) {
+        console.error(err);
+        list.innerHTML = '<div class="no-messages">❌ Error loading messages.</div>';
+      }
+    };
+  </script>
+
+  <script src="js/main.js"></script>
+
+</body>
+</html>
