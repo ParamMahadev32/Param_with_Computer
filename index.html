@@ -3,90 +3,87 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Ram Pandhare | Portfolio</title>
 
-  <link rel="stylesheet" href="css/style.css">
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
-
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-<header class="header">
+  <!-- ===== HEADER ===== -->
+  <header class="header">
 
-    <div class="logo">
-        RP.
-    </div>
+    <a href="index.html" class="logo">RP.</a>
 
     <nav>
-        <a href="index.html">Home</a>
-        <a href="projects.html">Projects</a>
-        <a href="skills.html">Skills</a>
-        <a href="contact.html">Contact</a>
+      <a href="index.html" class="active">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="skills.html">Skills</a>
+      <a href="contact.html">Contact</a>
     </nav>
 
-</header>
+  </header>
 
-<section class="hero">
+
+  <!-- ===== HERO ===== -->
+  <section class="hero">
 
     <div class="hero-left">
 
-        <p class="tag">
-            SOFTWARE DEVELOPER
-        </p>
+      <p class="tag">Software Developer</p>
 
-        <h1>
-            Building modern digital experiences.
-        </h1>
+      <h1>Building modern<br>digital experiences.</h1>
 
-        <p class="desc">
-            Passionate about web development, AI,
-            cloud computing, and modern UI design.
-        </p>
+      <p class="desc">
+        Passionate about web development, AI,
+        cloud computing, and modern UI design.
+      </p>
 
-        <div class="hero-buttons">
-
-            <a href="projects.html" class="btn">
-                View Projects
-            </a>
-
-            <a href="contact.html" class="btn-outline">
-                Contact Me
-            </a>
-
-        </div>
+      <div class="hero-buttons">
+        <a href="projects.html" class="btn">View Projects</a>
+        <a href="contact.html" class="btn-outline">Contact Me</a>
+      </div>
 
     </div>
 
     <div class="hero-right">
 
-        <div class="glass-card">
+      <div class="glass-card">
 
-            <h2>Tech Stack</h2>
+        <h2>Tech Stack</h2>
 
-            <div class="tech-grid">
-
-                <span>HTML</span>
-                <span>CSS</span>
-                <span>JavaScript</span>
-                <span>Firebase</span>
-                <span>AWS</span>
-                <span>Python</span>
-
-            </div>
-
+        <div class="tech-grid">
+          <span>HTML</span>
+          <span>CSS</span>
+          <span>JavaScript</span>
+          <span>Firebase</span>
+          <span>AWS</span>
+          <span>Python</span>
         </div>
+
+      </div>
 
     </div>
 
-</section>
+  </section>
 
-<footer>
+
+  <!-- ===== FOOTER ===== -->
+  <footer>
     <p>© 2026 Ram Mahadev Pandhare</p>
-</footer>
+  </footer>
+
+
+  <!-- ===== SCROLL HEADER EFFECT ===== -->
+  <script>
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 10);
+    });
+  </script>
 
 </body>
 </html>
