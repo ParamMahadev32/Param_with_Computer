@@ -1,0 +1,112 @@
+/* projects.css */
+
+.page-hero {
+  text-align: center;
+  padding: 80px 24px 40px;
+  animation: fadeSlideUp 0.6s ease both;
+}
+
+.page-hero .tag { margin-inline: auto; }
+.page-hero h1   { font-size: 2.8rem; margin-bottom: 14px; }
+.page-hero p    { color: #666; font-size: 1.05rem; max-width: 480px; margin-inline: auto; }
+
+.projects-wrapper {
+  max-width: 1000px;
+  margin-inline: auto;
+  padding: 20px 24px 100px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.project-card {
+  background: var(--clr-glass-bg);
+  border: 1px solid var(--clr-glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  animation: fadeSlideUp 0.6s ease both;
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 36px rgba(232, 98, 26, 0.13);
+  border-color: rgba(232, 98, 26, 0.4);
+}
+
+.project-icon {
+  font-size: 2rem;
+  width: 52px;
+  height: 52px;
+  background: var(--clr-primary-light);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.project-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.project-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--clr-primary);
+  background: var(--clr-primary-light);
+  border: 1px solid var(--clr-primary-border);
+  padding: 3px 10px;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.project-info h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111;
+}
+
+.project-info p {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.6;
+}
+
+.project-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.project-links .btn,
+.project-links .btn-outline {
+  padding: 9px 18px;
+  font-size: 0.85rem;
+}
+
+/* Animation delays */
+.project-card:nth-child(1) { animation-delay: 0.05s; }
+.project-card:nth-child(2) { animation-delay: 0.15s; }
+.project-card:nth-child(3) { animation-delay: 0.25s; }
+.project-card:nth-child(4) { animation-delay: 0.35s; }
+.project-card:nth-child(5) { animation-delay: 0.45s; }
+.project-card:nth-child(6) { animation-delay: 0.55s; }
+
+@media (max-width: 600px) {
+  .page-hero h1     { font-size: 2rem; }
+  .projects-grid    { grid-template-columns: 1fr; }
+}
