@@ -3,152 +3,184 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Ram Pandhare</title>
 
-  <title>Contact</title>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/contact.css">
 </head>
 
 <body>
 
-<header class="header">
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo">RP.</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="skills.html">Skills</a>
+      <a href="profile.html">Profile</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+  </header>
 
-    <div class="logo">
-        RP.
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <p class="tag">Get In Touch</p>
+    <h1>Contact Me</h1>
+    <p>Available for collaborations, internships, freelance work, and innovative projects.</p>
+  </div>
+
+
+  <!-- CONTACT SECTION -->
+  <div class="contact-wrapper">
+
+    <!-- Left: Info -->
+    <div class="contact-info glass-card">
+
+      <h3>Let's Connect</h3>
+      <p>Feel free to reach out. I'll get back to you as soon as possible.</p>
+
+      <!-- Phone -->
+      <div class="contact-item">
+        <div class="contact-icon">📞</div>
+        <div>
+          <span class="contact-label">Phone</span>
+          <!-- ADD YOUR PHONE NUMBER HERE -->
+          <a href="tel:+91XXXXXXXXXX">+91 XXXXX XXXXX</a>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="contact-item">
+        <div class="contact-icon">✉️</div>
+        <div>
+          <span class="contact-label">Email</span>
+          <a href="mailto:parammahadev21@gmail.com">parammahadev21@gmail.com</a>
+        </div>
+      </div>
+
     </div>
 
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="projects.html">Projects</a>
-        <a href="skills.html">Skills</a>
-        <a href="contact.html">Contact</a>
-    </nav>
 
-</header>
+    <!-- Right: Form -->
+    <div class="contact-form-card glass-card">
 
-<section class="contact-page">
+      <h3>Send a Message</h3>
 
-    <div class="contact-info">
+      <form id="contactForm">
 
-        <h1>Contact Me</h1>
-
-        <p>
-            Available for collaborations, internships,
-            freelance work, and innovative projects.
-        </p>
-
-        <div class="social-links">
-
-            <a href="https://www.linkedin.com/in/ram-mahadev-pandhare-724492382" target="_blank">
-                LinkedIn
-            </a>
-
-            <a href="mailto: parammahadev21@gmail.com">
-                Email
-            </a>
-
+        <div class="form-group">
+          <label for="name">Your Name</label>
+          <input type="text" id="name" placeholder="Ram Pandhare" required>
         </div>
 
-    </div>
+        <div class="form-group">
+          <label for="email">Your Email</label>
+          <input type="email" id="email" placeholder="you@email.com" required>
+        </div>
 
-    <form id="contactForm" class="contact-form">
+        <div class="form-group">
+          <label for="message">Your Message</label>
+          <textarea id="message" placeholder="Hi Ram, I'd like to..." rows="5" required></textarea>
+        </div>
 
-        <input 
-        type="text" 
-        id="name"
-        placeholder="Your Name"
-        required>
-
-        <input 
-        type="email"
-        id="email"
-        placeholder="Your Email"
-        required>
-
-        <textarea
-        id="message"
-        placeholder="Your Message"
-        required></textarea>
-
-        <button type="submit">
-            Send Message
+        <button type="submit" class="btn submit-btn">
+          <span id="btn-text">Send Message</span>
+          <span id="btn-loader" style="display:none;">Sending...</span>
         </button>
 
-    </form>
+        <p id="form-success" class="form-success" style="display:none;">
+          ✅ Message sent successfully!
+        </p>
+        <p id="form-error" class="form-error" style="display:none;">
+          ❌ Something went wrong. Please try again.
+        </p>
 
-</section>
+      </form>
 
-<script type="module">
+    </div>
 
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  </div><!-- /contact-wrapper -->
 
-import {
-getFirestore,
-collection,
-addDoc
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBEUaZ3a2jEjASA7tmWpaTOJod_SwbvZUg",
-  authDomain: "portfolio-contact-44e9b.firebaseapp.com",
-  projectId: "portfolio-contact-44e9b",
-  storageBucket: "portfolio-contact-44e9b.firebasestorage.app",
-  messagingSenderId: "964519094829",
-  appId: "1:964519094829:web:f941eba4c914cf00a8e6a4",
-  measurementId: "G-7PRWGR9K5K"
-};
-const app = initializeApp(firebaseConfig);
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Ram Mahadev Pandhare</p>
+  </footer>
 
-const db = getFirestore(app);
 
-document
-.getElementById("contactForm")
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-.addEventListener("submit", async (e) => {
+    import { getFirestore, collection, addDoc }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    e.preventDefault();
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEUaZ3a2jEjASA7tmWpaTOJod_SwbvZUg",
+      authDomain: "portfolio-contact-44e9b.firebaseapp.com",
+      projectId: "portfolio-contact-44e9b",
+      storageBucket: "portfolio-contact-44e9b.firebasestorage.app",
+      messagingSenderId: "964519094829",
+      appId: "1:964519094829:web:f941eba4c914cf00a8e6a4",
+      measurementId: "G-7PRWGR9K5K"
+    };
 
-    const name =
-    document.getElementById("name").value;
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
 
-    const email =
-    document.getElementById("email").value;
+    const form       = document.getElementById("contactForm");
+    const btnText    = document.getElementById("btn-text");
+    const btnLoader  = document.getElementById("btn-loader");
+    const successMsg = document.getElementById("form-success");
+    const errorMsg   = document.getElementById("form-error");
 
-    const message =
-    document.getElementById("message").value;
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
 
-    try{
+      const name    = document.getElementById("name").value.trim();
+      const email   = document.getElementById("email").value.trim();
+      const message = document.getElementById("message").value.trim();
 
-        await addDoc(
-            collection(db, "messages"),
-            {
-                name,
-                email,
-                message,
-                createdAt: new Date()
-            }
-        );
+      // Show loading state
+      btnText.style.display   = "none";
+      btnLoader.style.display = "inline";
+      successMsg.style.display = "none";
+      errorMsg.style.display   = "none";
 
-        alert("Message Sent!");
+      try {
+        await addDoc(collection(db, "messages"), {
+          name,
+          email,
+          message,
+          createdAt: new Date()
+        });
 
-        document
-        .getElementById("contactForm")
-        .reset();
+        form.reset();
+        successMsg.style.display = "block";
 
-    }
+      } catch (error) {
+        console.error(error);
+        errorMsg.style.display = "block";
 
-    catch(error){
+      } finally {
+        btnText.style.display   = "inline";
+        btnLoader.style.display = "none";
+      }
+    });
+  </script>
 
-        alert("Error Sending Message");
-
-        console.log(error);
-    }
-
-});
-
-</script>
+  <!-- SCROLL HEADER -->
+  <script>
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 10);
+    });
+  </script>
 
 </body>
 </html>
