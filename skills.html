@@ -1,37 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skills</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Skills | Ram Pandhare</title>
 
-    <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/skills.css">
 </head>
+
 <body>
 
-<header>
-    <h1>My Skills</h1>
-
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo">RP.</a>
     <nav>
-        <a href="index.html">Home</a>
-        <a href="projects.html">Projects</a>
-        <a href="skills.html">Skills</a>
-        <a href="contact.html">Contact</a>
+      <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="skills.html" class="active">Skills</a>
+      <a href="contact.html">Contact</a>
     </nav>
-</header>
+  </header>
 
-<section class="skills">
 
-    <div class="skill-box">HTML</div>
-    <div class="skill-box">CSS</div>
-    <div class="skill-box">JavaScript</div>
-    <div class="skill-box">Python</div>
-    <div class="skill-box">Machine Learning</div>
-    <div class="skill-box">AWS</div>
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <p class="tag">What I Know</p>
+    <h1>My Skills</h1>
+    <p>Technologies and tools I work with to build modern digital products.</p>
+  </div>
 
-</section>
 
-<script src="js/script.js"></script>
+  <!-- SKILLS -->
+  <div class="skills-wrapper">
+
+    <!-- Web Development -->
+    <p class="skills-category">Web Development</p>
+    <div class="skills-grid">
+
+      <div class="skill-card">
+        <div class="skill-icon">🌐</div>
+        <span class="skill-name">HTML</span>
+        <div class="skill-bar-track">
+          <div class="skill-bar-fill" data-level="95"></div>
+        </div>
+        <span class="skill-level">Expert</span>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon">🎨</div>
+        <span class="skill-name">CSS</span>
+        <div class="skill-bar-track">
+          <div class="skill-bar-fill" data-level="90"></div>
+        </div>
+        <span class="skill-level">Expert</span>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon">⚡</div>
+        <span class="skill-name">JavaScript</span>
+        <div class="skill-bar-track">
+          <div class="skill-bar-fill" data-level="80"></div>
+        </div>
+        <span class="skill-level">Advanced</span>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon">🔥</div>
+        <span class="skill-name">Firebase</span>
+        <div class="skill-bar-track">
+          <div class="skill-bar-fill" data-level="70"></div>
+        </div>
+        <span class="skill-level">Intermediate</span>
+      </div>
+
+    </div>
+
+    <!-- Programming & AI -->
+    <p class="skills-category">Programming & AI</p>
+    <div class="skills-grid">
+
+      <div class="skill-card">
+        <div class="skill-icon">🐍</div>
+        <span class="skill-name">Python</span>
+        <div class="skill-bar-track">
+          <div class="skill-bar-fill" data-level="85"></div>
+        </div>
+        <span class="skill-level">Advanced</span>
+      </div>
+
+      <div class="skill-card">
+        <div class="skill-icon">🤖</div>
+        <span class="skill-name">Machine Learning</span>
+        <div class="skill-bar-track">
+          <div class="skill-bar-fill" data-level="65"></div>
+        </div>
+        <span class="skill-level">Intermediate</span>
+      </div>
+
+    </div>
+
+    <!-- Cloud & DevOps -->
+    <p class="skills-category">Cloud & DevOps</p>
+    <div class="skills-grid">
+
+      <div class="skill-card">
+        <div class="skill-icon">☁️</div>
+        <span class="skill-name">AWS</span>
+        <div class="skill-bar-track">
+          <div class="skill-bar-fill" data-level="72"></div>
+        </div>
+        <span class="skill-level">Intermediate</span>
+      </div>
+
+    </div>
+
+  </div><!-- /skills-wrapper -->
+
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Ram Mahadev Pandhare</p>
+  </footer>
+
+
+  <script>
+    // Sticky header shadow
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    // Animate skill bars on scroll into view
+    const fills = document.querySelectorAll('.skill-bar-fill');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const level = entry.target.getAttribute('data-level');
+          entry.target.style.width = level + '%';
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.3 });
+
+    fills.forEach(fill => observer.observe(fill));
+  </script>
 
 </body>
 </html>
