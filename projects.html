@@ -1,45 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects | Ram Pandhare</title>
 
-    <link rel="stylesheet" href="css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/projects.css">
 </head>
+
 <body>
 
-<header>
-    <h1>My Projects</h1>
-
+  <!-- HEADER -->
+  <header class="header">
+    <a href="index.html" class="logo">RP.</a>
     <nav>
-        <a href="index.html">Home</a>
-        <a href="projects.html">Projects</a>
-        <a href="skills.html">Skills</a>
-        <a href="contact.html">Contact</a>
+      <a href="index.html">Home</a>
+      <a href="projects.html" class="active">Projects</a>
+      <a href="skills.html">Skills</a>
+      <a href="contact.html">Contact</a>
     </nav>
-</header>
+  </header>
 
-<section class="card-container">
 
-    <div class="card">
-        <h2>Portfolio Website</h2>
-        <p>Modern responsive portfolio design.</p>
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <p class="tag">What I've Built</p>
+    <h1>My Projects</h1>
+    <p>A collection of things I've designed, built, and shipped.</p>
+  </div>
+
+
+  <!-- PROJECTS GRID -->
+  <div class="projects-wrapper">
+    <div class="projects-grid">
+
+      <!-- Card 1 -->
+      <div class="project-card">
+        <div class="project-icon">🌐</div>
+        <div class="project-info">
+          <span class="project-tag">Web</span>
+          <h2>Portfolio Website</h2>
+          <p>Modern responsive portfolio built with HTML, CSS and JavaScript.</p>
+        </div>
+        <div class="project-links">
+          <a href="#" class="btn">Live Demo</a>
+          <a href="#" class="btn-outline">GitHub</a>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="project-card">
+        <div class="project-icon">🤖</div>
+        <div class="project-info">
+          <span class="project-tag">AI</span>
+          <h2>Health Bot</h2>
+          <p>AI based healthcare chatbot that answers medical queries intelligently.</p>
+        </div>
+        <div class="project-links">
+          <a href="#" class="btn">Live Demo</a>
+          <a href="#" class="btn-outline">GitHub</a>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="project-card">
+        <div class="project-icon">📊</div>
+        <div class="project-info">
+          <span class="project-tag">ML</span>
+          <h2>Prediction Model</h2>
+          <p>Mathematics based prediction system using machine learning algorithms.</p>
+        </div>
+        <div class="project-links">
+          <a href="#" class="btn">Live Demo</a>
+          <a href="#" class="btn-outline">GitHub</a>
+        </div>
+      </div>
+
+      <!-- ADD MORE CARDS BELOW THIS LINE
+      <div class="project-card">
+        <div class="project-icon">🔥</div>
+        <div class="project-info">
+          <span class="project-tag">Tag</span>
+          <h2>Project Name</h2>
+          <p>Short description of the project.</p>
+        </div>
+        <div class="project-links">
+          <a href="#" class="btn">Live Demo</a>
+          <a href="#" class="btn-outline">GitHub</a>
+        </div>
+      </div>
+      -->
+
     </div>
+  </div>
 
-    <div class="card">
-        <h2>Health Bot</h2>
-        <p>AI based healthcare chatbot project.</p>
-    </div>
 
-    <div class="card">
-        <h2>Prediction Model</h2>
-        <p>Mathematics based prediction system.</p>
-    </div>
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Ram Mahadev Pandhare</p>
+  </footer>
 
-</section>
 
-<script src="js/script.js"></script>
+  <script>
+    // Sticky header shadow
+    const header = document.querySelector('.header');
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('scrolled', window.scrollY > 10);
+    });
+  </script>
 
 </body>
 </html>
