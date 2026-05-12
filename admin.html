@@ -15,7 +15,7 @@
 
   <!-- HEADER -->
   <header class="header">
-    <a href="index.html" class="logo">RM.</a>
+    <a href="index.html" class="logo">RP.</a>
     <nav>
       <a href="index.html">← Back to Portfolio</a>
     </nav>
@@ -39,21 +39,18 @@
   </div>
 
 
-  <!-- MESSAGES SCREEN (hidden until login) -->
+  <!-- MESSAGES SCREEN -->
   <div id="messages-screen" style="display:none;">
-
     <div class="admin-hero">
       <p class="tag">Admin Panel</p>
       <h1>All Messages</h1>
       <p id="msg-count" class="msg-count">Loading...</p>
     </div>
-
     <div class="messages-wrapper">
       <div id="messages-list">
         <div class="loading">⏳ Fetching messages...</div>
       </div>
     </div>
-
   </div>
 
 
@@ -63,15 +60,14 @@
   </footer>
 
 
-  <!-- PASSWORD CHECK -->
+  <!-- PASSWORD -->
   <script>
-    // SET YOUR PASSWORD HERE
     const ADMIN_PASSWORD = "RamSita@Army21";
 
     function checkPassword() {
       const input = document.getElementById('admin-password').value;
       if (input === ADMIN_PASSWORD) {
-        document.getElementById('login-screen').style.display  = 'none';
+        document.getElementById('login-screen').style.display = 'none';
         document.getElementById('messages-screen').style.display = 'block';
         loadMessages();
       } else {
@@ -79,7 +75,6 @@
       }
     }
 
-    // Allow Enter key
     document.getElementById('admin-password')
       .addEventListener('keydown', (e) => {
         if (e.key === 'Enter') checkPassword();
@@ -87,12 +82,12 @@
   </script>
 
 
-  <!-- FIREBASE — LOAD ALL MESSAGES -->
+  <!-- FIREBASE -->
   <script type="module">
     import { initializeApp }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-    import { getFirestore, collection, getDocs, orderBy, query, deleteDoc, doc }
+    import { getFirestore, collection, getDocs, orderBy, query, deleteDoc, doc, Timestamp }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -108,15 +103,54 @@
     const app = initializeApp(firebaseConfig);
     const db  = getFirestore(app);
 
-    // Expose loadMessages globally
+    // FORMAT DATE — handles both Firestore Timestamp and JS Date
+    function formatDate(createdAt) {
+      try {
+        let date;
+
+        if (!createdAt) return 'Unknown date';
+
+        // Firestore Timestamp
+        if (typeof createdAt.toDate === 'function') {
+          date = createdAt.toDate();
+        }
+        // JS Date object stored directly
+        else if (createdAt instanceof Date) {
+          date = createdAt;
+        }
+        // Firestore stores as seconds + nanoseconds object
+        else if (createdAt.seconds) {
+          date = new Date(createdAt.seconds * 1000);
+        }
+        // String or number fallback
+        else {
+          date = new Date(createdAt);
+        }
+
+        if (isNaN(date)) return 'Unknown date';
+
+        return date.toLocaleString('en-IN', {
+          day:    '2-digit',
+          month:  'short',
+          year:   'numeric',
+          hour:   '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+
+      } catch (e) {
+        return 'Unknown date';
+      }
+    }
+
     window.loadMessages = async () => {
       const list    = document.getElementById('messages-list');
       const counter = document.getElementById('msg-count');
 
       try {
-        const q       = query(collection(db, "messages"), orderBy("createdAt", "desc"));
-        const snap    = await getDocs(q);
-        const msgs    = snap.docs;
+        const q    = query(collection(db, "messages"), orderBy("createdAt", "desc"));
+        const snap = await getDocs(q);
+        const msgs = snap.docs;
 
         counter.textContent = `${msgs.length} message${msgs.length !== 1 ? 's' : ''} received`;
 
@@ -130,15 +164,7 @@
         msgs.forEach(docSnap => {
           const d    = docSnap.data();
           const id   = docSnap.id;
-          const raw  = d.createdAt?.toDate();
-          const date = raw ?    raw.toLocaleString('en-IN', {
-  day:    '2-digit',
-  month:  'short',
-  year:   'numeric',
-  hour:   '2-digit',
-  minute: '2-digit',
-  hour12: true
-}) : 'Unknown date';
+          const date = formatDate(d.createdAt);
 
           const card = document.createElement('div');
           card.className = 'message-card glass-card';
@@ -149,19 +175,19 @@
                 <h3>${d.name || 'No Name'}</h3>
                 <a href="mailto:${d.email}">${d.email || 'No Email'}</a>
               </div>
-              <span class="msg-date">${date}</span>
+              <span class="msg-date">📅 ${date}</span>
             </div>
             <p class="msg-body">${d.message || 'No message'}</p>
             <div class="msg-actions">
               <a href="mailto:${d.email}?subject=Re: Your message&body=Hi ${d.name},"
                  class="btn">Reply</a>
-              <button class="btn-outline delete-btn" data-id="${id}">Delete</button>
+              <button class="btn-outline delete-btn" data-id="${id}">🗑 Delete</button>
             </div>
           `;
           list.appendChild(card);
         });
 
-        // Delete buttons
+        // Delete
         document.querySelectorAll('.delete-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
             const id = btn.getAttribute('data-id');
@@ -175,8 +201,8 @@
         });
 
       } catch (err) {
-        console.error(err);
-        list.innerHTML = '<div class="no-messages">❌ Error loading messages.</div>';
+        console.error("Firebase error:", err);
+        list.innerHTML = `<div class="no-messages">❌ Error: ${err.message}</div>`;
       }
     };
   </script>
