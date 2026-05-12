@@ -165,8 +165,13 @@
 
 .msg-date {
   font-size: 0.75rem;
-  color: #aaa;
+  color: #888;
   white-space: nowrap;
+  background: var(--clr-primary-light);
+  border: 1px solid var(--clr-primary-border);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-weight: 500;
 }
 
 .msg-body {
