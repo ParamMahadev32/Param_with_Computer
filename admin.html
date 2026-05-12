@@ -130,8 +130,8 @@
         msgs.forEach(docSnap => {
           const d    = docSnap.data();
           const id   = docSnap.id;
-const raw  = d.createdAt?.toDate();
-const date = raw ? raw.toLocaleString('en-IN', {
+          const raw  = d.createdAt?.toDate();
+          const date = raw ?    raw.toLocaleString('en-IN', {
   day:    '2-digit',
   month:  'short',
   year:   'numeric',
