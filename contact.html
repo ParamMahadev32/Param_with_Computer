@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+7<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -74,7 +74,10 @@
           <label for="name">Your Name</label>
           <input type="text" id="name" placeholder="Ram Mahadev Pandhare" required>
         </div>
-
+<div class="form-group">
+          <label for="Mobile">Mobile Number </label>
+          <input type="integer" id="Mobile Numbere" placeholder="number" required>
+</div>
         <div class="form-group">
           <label for="email">Your Email</label>
           <input type="email" id="email" placeholder="you@email.com" required>
@@ -141,6 +144,7 @@
       e.preventDefault();
 
       const name    = document.getElementById("name").value.trim();
+      const Mobile    = document.getElementById("Mobile").value.trim();
       const email   = document.getElementById("email").value.trim();
       const message = document.getElementById("message").value.trim();
 
@@ -153,6 +157,7 @@
       try {
         await addDoc(collection(db, "messages"), {
           name,
+          Mobile,
           email,
           message,
           createdAt: new Date()
