@@ -12,11 +12,11 @@
 
 /* WRAPPER */
 .contact-wrapper {
-  max-width: 900px;
+  max-width: 960px;
   margin-inline: auto;
   padding: 20px 24px 100px;
   display: grid;
-  grid-template-columns: 1fr 1.6fr;
+  grid-template-columns: 1fr 1.8fr;
   gap: 20px;
   align-items: start;
 }
@@ -93,25 +93,43 @@
   margin-bottom: 20px;
 }
 
+/* FORM ROW */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 0;
+}
+
 /* FORM GROUPS */
 .form-group {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .form-group label {
   font-size: 0.82rem;
   font-weight: 600;
   color: #444;
-  letter-spacing: 0.3px;
+}
+
+.required {
+  color: var(--clr-primary);
+  font-size: 0.85rem;
+}
+
+.optional {
+  color: #aaa;
+  font-size: 0.75rem;
+  font-weight: 400;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
-  padding: 12px 14px;
+  padding: 11px 14px;
   border: 1px solid var(--clr-primary-border);
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.6);
@@ -125,7 +143,7 @@
 
 .form-group input::placeholder,
 .form-group textarea::placeholder {
-  color: #aaa;
+  color: #bbb;
 }
 
 .form-group input:focus,
@@ -135,7 +153,7 @@
   background: #fff;
 }
 
-/* SUBMIT BUTTON */
+/* SUBMIT */
 .submit-btn {
   width: 100%;
   margin-top: 4px;
@@ -151,7 +169,7 @@
   border: 1px solid #c8e6c9;
   border-radius: var(--radius-md);
   padding: 10px 14px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .form-error {
@@ -162,12 +180,16 @@
   border: 1px solid #ffcdd2;
   border-radius: var(--radius-md);
   padding: 10px 14px;
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 /* RESPONSIVE */
-@media (max-width: 700px) {
+@media (max-width: 768px) {
   .contact-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .form-row {
     grid-template-columns: 1fr;
   }
 
