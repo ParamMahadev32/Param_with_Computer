@@ -87,7 +87,7 @@
 
     try {
       const snap = await getDocs(
-        query(collection(db, "achievements"), orderBy("createdAt", "desc"))
+        collection(db, "achievements")
       );
 
       loading.style.display = 'none';
