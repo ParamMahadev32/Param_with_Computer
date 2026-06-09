@@ -75,14 +75,13 @@
       measurementId: "G-7PRWGR9K5K"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db  = getFirestore(app);
-
     const loading = document.getElementById('skills-loading');
     const empty   = document.getElementById('skills-empty');
     const content = document.getElementById('skills-content');
 
     try {
+      const app  = initializeApp(firebaseConfig);
+      const db   = getFirestore(app);
       const snap = await getDocs(collection(db, "skills"));
 
       loading.style.display = 'none';
@@ -149,8 +148,14 @@
       fills.forEach(fill => observer.observe(fill));
 
     } catch (err) {
-      console.error(err);
-      loading.textContent = '❌ Failed to load skills.';
+      loading.innerHTML = `
+        <div style="color:#c62828; background:#fff5f5; border:1px solid #ffcdd2;
+                    padding:16px; border-radius:10px; font-size:0.9rem;
+                    max-width:500px; margin:0 auto; text-align:left;">
+          ❌ Firebase Error:<br><br>
+          <strong>${err.code || 'unknown'}</strong><br>
+          ${err.message}
+        </div>`;
     }
   </script>
 
