@@ -38,7 +38,7 @@
   <!-- ACHIEVEMENTS -->
   <div class="achievements-wrapper">
     <div id="achievements-loading" class="page-loading">⏳ Loading achievements...</div>
-    <div id="achievements-empty"   class="page-empty"   style="display:none;">📭 No achievements yet.</div>
+    <div id="achievements-empty" class="page-empty" style="display:none;">📭 No achievements yet.</div>
     <div id="achievements-content" style="display:none;"></div>
   </div>
 
@@ -67,7 +67,6 @@
       measurementId: "G-7PRWGR9K5K"
     };
 
-    // Emoji based on tag
     function getEmoji(tag) {
       if (!tag) return '🏆';
       const t = tag.toLowerCase();
@@ -105,7 +104,19 @@
           const item = document.createElement('div');
           item.className = `achievement-item${isReverse ? ' reverse' : ''}`;
 
-          item.innerHTML = `
+          // IMAGE block
+          const imageBlock = `
+            <div class="achievement-image ${d.img ? '' : 'img-fallback'}">
+              ${d.img
+                ? `<img src="${d.img}" alt="${d.title}"
+                       onerror="this.parentElement.classList.add('img-fallback');
+                                this.style.display='none';">`
+                : ''}
+              <div class="img-placeholder">${getEmoji(d.tag)}</div>
+            </div>`;
+
+          // INFO block
+          const infoBlock = `
             <div class="achievement-info glass-card">
               <span class="achievement-tag">${d.tag || 'Achievement'}</span>
               <h2>${d.title}</h2>
@@ -114,19 +125,13 @@
                 ${d.org  ? `<span class="meta-item">🏛️ Issued by: ${d.org}</span>`  : ''}
                 ${d.year ? `<span class="meta-item">📅 Year: ${d.year}</span>` : ''}
               </div>
-            </div>
-            <div class="achievement-image ${d.img ? '' : 'img-fallback'}">
-              ${d.img
-                ? `<img
-                    src="${d.img}"
-                    alt="${d.title}"
-                    onerror="this.parentElement.classList.add('img-fallback');
-                             this.style.display='none';"
-                  >`
-                : ''}
-              <div class="img-placeholder">${getEmoji(d.tag)}</div>
-            </div>
-          `;
+            </div>`;
+
+          // Even: image LEFT, info RIGHT
+          // Odd:  info LEFT, image RIGHT
+          item.innerHTML = isReverse
+            ? infoBlock + imageBlock
+            : imageBlock + infoBlock;
 
           content.appendChild(item);
         });
@@ -140,7 +145,7 @@
               observer.unobserve(entry.target);
             }
           });
-        }, { threshold: 0.15 });
+        }, { threshold: 0.1 });
 
         items.forEach(item => observer.observe(item));
 
