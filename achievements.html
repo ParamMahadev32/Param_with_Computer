@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Achievements | Ram Mahadev</title>
+  <title>Achievements | Ram Pandhare</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -15,12 +15,14 @@
 
   <!-- HEADER -->
   <header class="header">
-    <a href="index.html" class="logo">RM.</a>
+    <a href="index.html" class="logo">RP.</a>
     <nav>
       <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="skills.html">Skills</a>
       <a href="profile.html">Profile</a>
       <a href="achievements.html" class="active">Achievements</a>
-      <a href="skills.html">Skills</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </header>
 
@@ -36,100 +38,18 @@
   <!-- ACHIEVEMENTS -->
   <div class="achievements-wrapper">
 
-    <!-- 1: Info Left, Image Right -->
-    <div class="achievement-item">
-      <div class="achievement-info glass-card">
-        <span class="achievement-tag">Certification</span>
-        <h2>Achievement Title One</h2>
-        <p>Describe your achievement here. What did you do, what did you learn, and why does it matter?</p>
-        <div class="achievement-meta">
-          <span class="meta-item">🏛️ Issued by: Organization Name</span>
-          <span class="meta-item">📅 Year: 2024</span>
-        </div>
-      </div>
-      <div class="achievement-image">
-        <img src="assets/achievement1.jpg" alt="Achievement One"
-             onerror="this.parentElement.classList.add('img-fallback')">
-        <div class="img-placeholder">🏆</div>
-      </div>
+    <!-- Loading -->
+    <div id="achievements-loading" class="page-loading">
+      ⏳ Loading achievements...
     </div>
 
-
-    <!-- 2: Image Left, Info Right -->
-    <div class="achievement-item reverse">
-      <div class="achievement-info glass-card">
-        <span class="achievement-tag">Award</span>
-        <h2>Achievement Title Two</h2>
-        <p>Describe your achievement here. What did you do, what did you learn, and why does it matter?</p>
-        <div class="achievement-meta">
-          <span class="meta-item">🏛️ Issued by: Organization Name</span>
-          <span class="meta-item">📅 Year: 2024</span>
-        </div>
-      </div>
-      <div class="achievement-image">
-        <img src="assets/achievement2.jpg" alt="Achievement Two"
-             onerror="this.parentElement.classList.add('img-fallback')">
-        <div class="img-placeholder">🎖️</div>
-      </div>
+    <!-- Empty -->
+    <div id="achievements-empty" class="page-empty" style="display:none;">
+      📭 No achievements yet. Check back soon!
     </div>
 
-
-    <!-- 3: Info Left, Image Right -->
-    <div class="achievement-item">
-      <div class="achievement-info glass-card">
-        <span class="achievement-tag">Competition</span>
-        <h2>Achievement Title Three</h2>
-        <p>Describe your achievement here. What did you do, what did you learn, and why does it matter?</p>
-        <div class="achievement-meta">
-          <span class="meta-item">🏛️ Issued by: Organization Name</span>
-          <span class="meta-item">📅 Year: 2025</span>
-        </div>
-      </div>
-      <div class="achievement-image">
-        <img src="assets/achievement3.jpg" alt="Achievement Three"
-             onerror="this.parentElement.classList.add('img-fallback')">
-        <div class="img-placeholder">🥇</div>
-      </div>
-    </div>
-
-
-    <!-- 4: Image Left, Info Right -->
-    <div class="achievement-item reverse">
-      <div class="achievement-info glass-card">
-        <span class="achievement-tag">Certification</span>
-        <h2>Achievement Title Four</h2>
-        <p>Describe your achievement here. What did you do, what did you learn, and why does it matter?</p>
-        <div class="achievement-meta">
-          <span class="meta-item">🏛️ Issued by: Organization Name</span>
-          <span class="meta-item">📅 Year: 2025</span>
-        </div>
-      </div>
-      <div class="achievement-image">
-        <img src="assets/achievement4.jpg" alt="Achievement Four"
-             onerror="this.parentElement.classList.add('img-fallback')">
-        <div class="img-placeholder">📜</div>
-      </div>
-    </div>
-
-    <!-- COPY BLOCK BELOW TO ADD MORE -->
-    <!--
-    <div class="achievement-item">  or  <div class="achievement-item reverse">
-      <div class="achievement-info glass-card">
-        <span class="achievement-tag">Tag</span>
-        <h2>Title</h2>
-        <p>Description</p>
-        <div class="achievement-meta">
-          <span class="meta-item">🏛️ Issued by: Name</span>
-          <span class="meta-item">📅 Year: 2025</span>
-        </div>
-      </div>
-      <div class="achievement-image">
-        <img src="assets/achievementX.jpg" alt="X"
-             onerror="this.parentElement.classList.add('img-fallback')">
-        <div class="img-placeholder">🏆</div>
-      </div>
-    </div>
-    -->
+    <!-- Content -->
+    <div id="achievements-content" style="display:none;"></div>
 
   </div>
 
@@ -140,7 +60,106 @@
   </footer>
 
 
-  <script src="js/achievements.js"></script>
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import { getFirestore, collection, getDocs, orderBy, query }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEUaZ3a2jEjASA7tmWpaTOJod_SwbvZUg",
+      authDomain: "portfolio-contact-44e9b.firebaseapp.com",
+      projectId: "portfolio-contact-44e9b",
+      storageBucket: "portfolio-contact-44e9b.firebasestorage.app",
+      messagingSenderId: "964519094829",
+      appId: "1:964519094829:web:f941eba4c914cf00a8e6a4",
+      measurementId: "G-7PRWGR9K5K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    const loading = document.getElementById('achievements-loading');
+    const empty   = document.getElementById('achievements-empty');
+    const content = document.getElementById('achievements-content');
+
+    try {
+      const snap = await getDocs(
+        query(collection(db, "achievements"), orderBy("createdAt", "desc"))
+      );
+
+      loading.style.display = 'none';
+
+      if (snap.empty) {
+        empty.style.display = 'block';
+        return;
+      }
+
+      content.style.display = 'block';
+
+      snap.forEach((docSnap, i) => {
+        const d   = docSnap.data();
+        const isReverse = i % 2 !== 0; // criss-cross alternate
+
+        const item = document.createElement('div');
+        item.className = `achievement-item${isReverse ? ' reverse' : ''}`;
+
+        item.innerHTML = `
+          <div class="achievement-info glass-card">
+            <span class="achievement-tag">${d.tag || 'Achievement'}</span>
+            <h2>${d.title}</h2>
+            <p>${d.desc}</p>
+            <div class="achievement-meta">
+              ${d.org  ? `<span class="meta-item">🏛️ Issued by: ${d.org}</span>`  : ''}
+              ${d.year ? `<span class="meta-item">📅 Year: ${d.year}</span>` : ''}
+            </div>
+          </div>
+          <div class="achievement-image ${d.img ? '' : 'img-fallback'}">
+            ${d.img
+              ? `<img src="${d.img}" alt="${d.title}"
+                      onerror="this.parentElement.classList.add('img-fallback'); this.style.display='none';">`
+              : ''}
+            <div class="img-placeholder">${getEmoji(d.tag)}</div>
+          </div>
+        `;
+
+        content.appendChild(item);
+      });
+
+      // Animate on scroll
+      const items = document.querySelectorAll('.achievement-item');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+
+      items.forEach(item => observer.observe(item));
+
+    } catch (err) {
+      console.error(err);
+      loading.textContent = '❌ Failed to load achievements.';
+    }
+
+    // Emoji based on tag
+    function getEmoji(tag) {
+      if (!tag) return '🏆';
+      const t = tag.toLowerCase();
+      if (t.includes('certif'))    return '📜';
+      if (t.includes('award'))     return '🎖️';
+      if (t.includes('competit'))  return '🥇';
+      if (t.includes('hackathon')) return '💻';
+      if (t.includes('scholar'))   return '🎓';
+      return '🏆';
+    }
+  </script>
+
+  <script src="js/main.js"></script>
 
 </body>
 </html>
