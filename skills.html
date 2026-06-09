@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Skills | Ram Mahadev</title>
+  <title>Skills | Ram Pandhare</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -15,12 +15,14 @@
 
   <!-- HEADER -->
   <header class="header">
-    <a href="index.html" class="logo">RM.</a>
+    <a href="index.html" class="logo">RP.</a>
     <nav>
       <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="skills.html" class="active">Skills</a>
       <a href="profile.html">Profile</a>
       <a href="achievements.html">Achievements</a>
-      <a href="skills.html" class="active">Skills</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </header>
 
@@ -36,88 +38,20 @@
   <!-- SKILLS -->
   <div class="skills-wrapper">
 
-    <!-- Web Development -->
-    <p class="skills-category">Web Development</p>
-    <div class="skills-grid">
-
-      <div class="skill-card">
-        <div class="skill-icon">🌐</div>
-        <span class="skill-name">HTML</span>
-        <div class="skill-bar-track">
-          <div class="skill-bar-fill" data-level="95"></div>
-        </div>
-        <span class="skill-level">Expert</span>
-      </div>
-
-      <div class="skill-card">
-        <div class="skill-icon">🎨</div>
-        <span class="skill-name">CSS</span>
-        <div class="skill-bar-track">
-          <div class="skill-bar-fill" data-level="90"></div>
-        </div>
-        <span class="skill-level">Expert</span>
-      </div>
-
-      <div class="skill-card">
-        <div class="skill-icon">⚡</div>
-        <span class="skill-name">JavaScript</span>
-        <div class="skill-bar-track">
-          <div class="skill-bar-fill" data-level="80"></div>
-        </div>
-        <span class="skill-level">Advanced</span>
-      </div>
-
-      <div class="skill-card">
-        <div class="skill-icon">🔥</div>
-        <span class="skill-name">Firebase</span>
-        <div class="skill-bar-track">
-          <div class="skill-bar-fill" data-level="70"></div>
-        </div>
-        <span class="skill-level">Intermediate</span>
-      </div>
-
+    <!-- Loading -->
+    <div id="skills-loading" class="page-loading">
+      ⏳ Loading skills...
     </div>
 
-    <!-- Programming & AI -->
-    <p class="skills-category">Programming & AI</p>
-    <div class="skills-grid">
-
-      <div class="skill-card">
-        <div class="skill-icon">🐍</div>
-        <span class="skill-name">Python</span>
-        <div class="skill-bar-track">
-          <div class="skill-bar-fill" data-level="85"></div>
-        </div>
-        <span class="skill-level">Advanced</span>
-      </div>
-
-      <div class="skill-card">
-        <div class="skill-icon">🤖</div>
-        <span class="skill-name">Machine Learning</span>
-        <div class="skill-bar-track">
-          <div class="skill-bar-fill" data-level="65"></div>
-        </div>
-        <span class="skill-level">Intermediate</span>
-      </div>
-
+    <!-- Empty -->
+    <div id="skills-empty" class="page-empty" style="display:none;">
+      📭 No skills yet. Check back soon!
     </div>
 
-    <!-- Cloud & DevOps -->
-    <p class="skills-category">Cloud & DevOps</p>
-    <div class="skills-grid">
+    <!-- Content -->
+    <div id="skills-content" style="display:none;"></div>
 
-      <div class="skill-card">
-        <div class="skill-icon">☁️</div>
-        <span class="skill-name">AWS</span>
-        <div class="skill-bar-track">
-          <div class="skill-bar-fill" data-level="72"></div>
-        </div>
-        <span class="skill-level">Intermediate</span>
-      </div>
-
-    </div>
-
-  </div><!-- /skills-wrapper -->
+  </div>
 
 
   <!-- FOOTER -->
@@ -126,27 +60,101 @@
   </footer>
 
 
-  <script>
-    // Sticky header shadow
-    const header = document.querySelector('.header');
-    window.addEventListener('scroll', () => {
-      header.classList.toggle('scrolled', window.scrollY > 10);
-    });
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-    // Animate skill bars on scroll into view
-    const fills = document.querySelectorAll('.skill-bar-fill');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const level = entry.target.getAttribute('data-level');
-          entry.target.style.width = level + '%';
-          observer.unobserve(entry.target);
-        }
+    import { getFirestore, collection, getDocs, orderBy, query }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEUaZ3a2jEjASA7tmWpaTOJod_SwbvZUg",
+      authDomain: "portfolio-contact-44e9b.firebaseapp.com",
+      projectId: "portfolio-contact-44e9b",
+      storageBucket: "portfolio-contact-44e9b.firebasestorage.app",
+      messagingSenderId: "964519094829",
+      appId: "1:964519094829:web:f941eba4c914cf00a8e6a4",
+      measurementId: "G-7PRWGR9K5K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    const loading = document.getElementById('skills-loading');
+    const empty   = document.getElementById('skills-empty');
+    const content = document.getElementById('skills-content');
+
+    try {
+      const snap = await getDocs(
+        query(collection(db, "skills"), orderBy("createdAt", "asc"))
+      );
+
+      loading.style.display = 'none';
+
+      if (snap.empty) {
+        empty.style.display = 'block';
+        return;
+      }
+
+      content.style.display = 'block';
+
+      // Group skills by category
+      const categories = {};
+      snap.forEach(docSnap => {
+        const d = docSnap.data();
+        const cat = d.category || 'Other';
+        if (!categories[cat]) categories[cat] = [];
+        categories[cat].push(d);
       });
-    }, { threshold: 0.3 });
 
-    fills.forEach(fill => observer.observe(fill));
+      // Render each category
+      Object.entries(categories).forEach(([cat, skills]) => {
+        const section = document.createElement('div');
+        section.innerHTML = `<p class="skills-category">${cat}</p>`;
+
+        const grid = document.createElement('div');
+        grid.className = 'skills-grid';
+
+        skills.forEach((d, i) => {
+          const card = document.createElement('div');
+          card.className = 'skill-card';
+          card.style.animationDelay = `${i * 0.08}s`;
+          card.innerHTML = `
+            <div class="skill-icon">${d.icon || '⚡'}</div>
+            <span class="skill-name">${d.name}</span>
+            <div class="skill-bar-track">
+              <div class="skill-bar-fill" data-level="${d.progress || 50}"></div>
+            </div>
+            <span class="skill-level">${d.level || 'Intermediate'}</span>
+          `;
+          grid.appendChild(card);
+        });
+
+        section.appendChild(grid);
+        content.appendChild(section);
+      });
+
+      // Animate bars on scroll
+      const fills = document.querySelectorAll('.skill-bar-fill');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.width = entry.target.dataset.level + '%';
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+
+      fills.forEach(fill => observer.observe(fill));
+
+    } catch (err) {
+      console.error(err);
+      loading.textContent = '❌ Failed to load skills.';
+    }
   </script>
+
+  <script src="js/main.js"></script>
 
 </body>
 </html>
