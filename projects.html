@@ -87,7 +87,7 @@
 
     try {
       const snap = await getDocs(
-        query(collection(db, "projects"), orderBy("createdAt", "desc"))
+        collection(db, "projects")
       );
 
       loading.style.display = 'none';
