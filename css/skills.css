@@ -110,3 +110,11 @@
 @media (max-width: 380px) {
   .skills-grid { grid-template-columns: 1fr; }
 }
+/* Loading & Empty states */
+.page-loading,
+.page-empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: #999;
+  font-size: 1rem;
+}
