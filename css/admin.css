@@ -409,3 +409,38 @@ input[type="range"] {
   color: #888;
   font-weight: 500;
 }
+/* Subject, Extra info */
+.msg-subject {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--clr-primary);
+}
+
+.msg-extra {
+  font-size: 0.82rem;
+  color: #888;
+  font-weight: 500;
+}
+
+/* Field hint */
+.field-hint {
+  font-size: 0.75rem;
+  color: #aaa;
+  margin: 4px 0;
+}
+
+/* Achievement image in list */
+.item-img {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid var(--clr-primary-border);
+}
+
+.item-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
