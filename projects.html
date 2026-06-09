@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Projects | Ram Mahadev</title>
+  <title>Projects | Ram Pandhare</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -15,11 +15,14 @@
 
   <!-- HEADER -->
   <header class="header">
-    <a href="index.html" class="logo">RM.</a>
+    <a href="index.html" class="logo">RP.</a>
     <nav>
       <a href="index.html">Home</a>
-      <a href="profile.html">Profile</a>
       <a href="projects.html" class="active">Projects</a>
+      <a href="skills.html">Skills</a>
+      <a href="profile.html">Profile</a>
+      <a href="achievements.html">Achievements</a>
+      <a href="contact.html">Contact</a>
     </nav>
   </header>
 
@@ -34,66 +37,20 @@
 
   <!-- PROJECTS GRID -->
   <div class="projects-wrapper">
-    <div class="projects-grid">
 
-      <!-- Card 1 -->
-      <div class="project-card">
-        <div class="project-icon">🌐</div>
-        <div class="project-info">
-          <span class="project-tag">Web</span>
-          <h2>Portfolio Website</h2>
-          <p>Modern responsive portfolio built with HTML, CSS and JavaScript.</p>
-        </div>
-        <div class="project-links">
-          <a href="#" class="btn">Live Demo</a>
-          <a href="#" class="btn-outline">GitHub</a>
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="project-card">
-        <div class="project-icon">🌐</div>
-        <div class="project-info">
-          <span class="project-tag">AI</span>
-          <h2>Health Bot</h2>
-          <p>AI based healthcare chatbot that answers medical queries intelligently.</p>
-        </div>
-        <div class="project-links">
-          <a href="#" class="btn">Live Demo</a>
-          <a href="#" class="btn-outline">GitHub</a>
-        </div>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="project-card">
-        <div class="project-icon">🏦</div>
-        <div class="project-info">
-          <span class="project-tag">Software</span>
-          <h2>Finance System</h2>
-          <p>A digital Bachat Gat app (such as ⁠Smart Bachat Gat or ⁠SahaBhagi) acts as a virtual, secure platform for Self Help Groups (SHGs) to manage savings, loans, and accounting entirely on smartphones.</p>
-        </div>
-        <div class="project-links">
-          <a href="https://finance-system-phi-vert.vercel.app/" class="btn">Live Application</a>
-          <a href="#" class="btn-outline">GitHub</a>
-        </div>
-      </div>
-
-      <!-- ADD MORE CARDS BELOW THIS LINE
-      <div class="project-card">
-        <div class="project-icon">🔥</div>
-        <div class="project-info">
-          <span class="project-tag">Tag</span>
-          <h2>Project Name</h2>
-          <p>Short description of the project.</p>
-        </div>
-        <div class="project-links">
-          <a href="#" class="btn">Live Demo</a>
-          <a href="#" class="btn-outline">GitHub</a>
-        </div>
-      </div>
-      -->
-
+    <!-- Loading state -->
+    <div id="projects-loading" class="page-loading">
+      ⏳ Loading projects...
     </div>
+
+    <!-- Empty state -->
+    <div id="projects-empty" class="page-empty" style="display:none;">
+      📭 No projects yet. Check back soon!
+    </div>
+
+    <!-- Grid -->
+    <div id="projects-grid" class="projects-grid" style="display:none;"></div>
+
   </div>
 
 
@@ -103,13 +60,76 @@
   </footer>
 
 
-  <script>
-    // Sticky header shadow
-    const header = document.querySelector('.header');
-    window.addEventListener('scroll', () => {
-      header.classList.toggle('scrolled', window.scrollY > 10);
-    });
+  <!-- FIREBASE -->
+  <script type="module">
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import { getFirestore, collection, getDocs, orderBy, query }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEUaZ3a2jEjASA7tmWpaTOJod_SwbvZUg",
+      authDomain: "portfolio-contact-44e9b.firebaseapp.com",
+      projectId: "portfolio-contact-44e9b",
+      storageBucket: "portfolio-contact-44e9b.firebasestorage.app",
+      messagingSenderId: "964519094829",
+      appId: "1:964519094829:web:f941eba4c914cf00a8e6a4",
+      measurementId: "G-7PRWGR9K5K"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db  = getFirestore(app);
+
+    const loading = document.getElementById('projects-loading');
+    const empty   = document.getElementById('projects-empty');
+    const grid    = document.getElementById('projects-grid');
+
+    try {
+      const snap = await getDocs(
+        query(collection(db, "projects"), orderBy("createdAt", "desc"))
+      );
+
+      loading.style.display = 'none';
+
+      if (snap.empty) {
+        empty.style.display = 'block';
+        return;
+      }
+
+      grid.style.display = 'grid';
+
+      snap.forEach((docSnap, i) => {
+        const d  = docSnap.data();
+        const card = document.createElement('div');
+        card.className = 'project-card';
+        card.style.animationDelay = `${i * 0.1}s`;
+        card.innerHTML = `
+          <div class="project-icon">${d.icon || '🚀'}</div>
+          <div class="project-info">
+            <span class="project-tag">${d.tag || 'Project'}</span>
+            <h2>${d.name}</h2>
+            <p>${d.desc}</p>
+          </div>
+          <div class="project-links">
+            ${d.demo && d.demo !== '#'
+              ? `<a href="${d.demo}" target="_blank" class="btn">Live Demo</a>`
+              : ''}
+            ${d.github && d.github !== '#'
+              ? `<a href="${d.github}" target="_blank" class="btn-outline">GitHub</a>`
+              : ''}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+    } catch (err) {
+      console.error(err);
+      loading.textContent = '❌ Failed to load projects.';
+    }
   </script>
+
+  <script src="js/main.js"></script>
 
 </body>
 </html>
