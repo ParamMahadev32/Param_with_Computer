@@ -20,6 +20,15 @@
   gap: 60px;
 }
 
+/* LOADING & EMPTY */
+.page-loading,
+.page-empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: #999;
+  font-size: 1rem;
+}
+
 /* ACHIEVEMENT ITEM */
 .achievement-item {
   display: grid;
@@ -34,15 +43,6 @@
 .achievement-item.visible {
   opacity: 1;
   transform: translateY(0);
-}
-
-/* REVERSE: image left, info right */
-.achievement-item.reverse {
-  direction: rtl;
-}
-
-.achievement-item.reverse > * {
-  direction: ltr;
 }
 
 /* INFO CARD */
@@ -117,6 +117,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center top;
   display: block;
 }
 
@@ -134,26 +135,27 @@
   opacity: 1;
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE — tablet */
 @media (max-width: 768px) {
   .page-hero h1 { font-size: 2rem; }
 
-  .achievement-item,
-  .achievement-item.reverse {
+  .achievement-item {
     grid-template-columns: 1fr;
-    direction: ltr;
     gap: 20px;
   }
 
+  /* Image always on top on mobile */
   .achievement-image {
-    order: -1;
+    order: -1 !important;
+  }
+
+  .achievement-info {
+    order: 1 !important;
   }
 }
-/* Loading & Empty states */
-.page-loading,
-.page-empty {
-  text-align: center;
-  padding: 80px 24px;
-  color: #999;
-  font-size: 1rem;
+
+/* RESPONSIVE — mobile */
+@media (max-width: 480px) {
+  .achievements-wrapper { gap: 40px; }
+  .achievement-info h2  { font-size: 1.2rem; }
 }
