@@ -75,14 +75,13 @@
       measurementId: "G-7PRWGR9K5K"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db  = getFirestore(app);
-
     const loading = document.getElementById('projects-loading');
     const empty   = document.getElementById('projects-empty');
     const grid    = document.getElementById('projects-grid');
 
     try {
+      const app  = initializeApp(firebaseConfig);
+      const db   = getFirestore(app);
       const snap = await getDocs(collection(db, "projects"));
 
       loading.style.display = 'none';
@@ -119,8 +118,14 @@
       });
 
     } catch (err) {
-      console.error(err);
-      loading.textContent = '❌ Failed to load projects.';
+      loading.innerHTML = `
+        <div style="color:#c62828; background:#fff5f5; border:1px solid #ffcdd2;
+                    padding:16px; border-radius:10px; font-size:0.9rem;
+                    max-width:500px; margin:0 auto; text-align:left;">
+          ❌ Firebase Error:<br><br>
+          <strong>${err.code || 'unknown'}</strong><br>
+          ${err.message}
+        </div>`;
     }
   </script>
 
