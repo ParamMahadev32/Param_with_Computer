@@ -37,17 +37,9 @@
 
   <!-- ACHIEVEMENTS -->
   <div class="achievements-wrapper">
-
-    <div id="achievements-loading" class="page-loading">
-      ⏳ Loading achievements...
-    </div>
-
-    <div id="achievements-empty" class="page-empty" style="display:none;">
-      📭 No achievements yet. Check back soon!
-    </div>
-
+    <div id="achievements-loading" class="page-loading">⏳ Loading achievements...</div>
+    <div id="achievements-empty"   class="page-empty"   style="display:none;">📭 No achievements yet.</div>
     <div id="achievements-content" style="display:none;"></div>
-
   </div>
 
 
@@ -75,13 +67,6 @@
       measurementId: "G-7PRWGR9K5K"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db  = getFirestore(app);
-
-    const loading = document.getElementById('achievements-loading');
-    const empty   = document.getElementById('achievements-empty');
-    const content = document.getElementById('achievements-content');
-
     // Emoji based on tag
     function getEmoji(tag) {
       if (!tag) return '🏆';
@@ -94,68 +79,82 @@
       return '🏆';
     }
 
-    try {
-      const snap = await getDocs(collection(db, "achievements"));
+    async function loadAchievements() {
+      const loading = document.getElementById('achievements-loading');
+      const empty   = document.getElementById('achievements-empty');
+      const content = document.getElementById('achievements-content');
 
-      loading.style.display = 'none';
+      try {
+        const app  = initializeApp(firebaseConfig);
+        const db   = getFirestore(app);
+        const snap = await getDocs(collection(db, "achievements"));
 
-      if (snap.empty) {
-        empty.style.display = 'block';
-        return;
-      }
+        loading.style.display = 'none';
 
-      content.style.display = 'block';
+        if (snap.empty) {
+          empty.style.display = 'block';
+          return;
+        }
 
-      snap.forEach((docSnap, i) => {
-        const d         = docSnap.data();
-        const isReverse = i % 2 !== 0;
+        content.style.display = 'block';
 
-        const item = document.createElement('div');
-        item.className = `achievement-item${isReverse ? ' reverse' : ''}`;
+        snap.forEach((docSnap, i) => {
+          const d         = docSnap.data();
+          const isReverse = i % 2 !== 0;
 
-        item.innerHTML = `
-          <div class="achievement-info glass-card">
-            <span class="achievement-tag">${d.tag || 'Achievement'}</span>
-            <h2>${d.title}</h2>
-            <p>${d.desc}</p>
-            <div class="achievement-meta">
-              ${d.org  ? `<span class="meta-item">🏛️ Issued by: ${d.org}</span>`  : ''}
-              ${d.year ? `<span class="meta-item">📅 Year: ${d.year}</span>` : ''}
+          const item = document.createElement('div');
+          item.className = `achievement-item${isReverse ? ' reverse' : ''}`;
+
+          item.innerHTML = `
+            <div class="achievement-info glass-card">
+              <span class="achievement-tag">${d.tag || 'Achievement'}</span>
+              <h2>${d.title}</h2>
+              <p>${d.desc}</p>
+              <div class="achievement-meta">
+                ${d.org  ? `<span class="meta-item">🏛️ Issued by: ${d.org}</span>`  : ''}
+                ${d.year ? `<span class="meta-item">📅 Year: ${d.year}</span>` : ''}
+              </div>
             </div>
-          </div>
-          <div class="achievement-image ${d.img ? '' : 'img-fallback'}">
-            ${d.img
-              ? `<img
-                  src="${d.img}"
-                  alt="${d.title}"
-                  onerror="this.parentElement.classList.add('img-fallback');
-                           this.style.display='none';"
-                >`
-              : ''}
-            <div class="img-placeholder">${getEmoji(d.tag)}</div>
-          </div>
-        `;
+            <div class="achievement-image ${d.img ? '' : 'img-fallback'}">
+              ${d.img
+                ? `<img
+                    src="${d.img}"
+                    alt="${d.title}"
+                    onerror="this.parentElement.classList.add('img-fallback');
+                             this.style.display='none';"
+                  >`
+                : ''}
+              <div class="img-placeholder">${getEmoji(d.tag)}</div>
+            </div>
+          `;
 
-        content.appendChild(item);
-      });
-
-      // Animate on scroll
-      const items = document.querySelectorAll('.achievement-item');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-            observer.unobserve(entry.target);
-          }
+          content.appendChild(item);
         });
-      }, { threshold: 0.15 });
 
-      items.forEach(item => observer.observe(item));
+        // Animate on scroll
+        const items = document.querySelectorAll('.achievement-item');
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15 });
 
-    } catch (err) {
-      console.error(err);
-      loading.textContent = '❌ Failed to load achievements.';
+        items.forEach(item => observer.observe(item));
+
+      } catch (err) {
+        loading.innerHTML = `
+          <div style="color:#c62828;background:#fff5f5;border:1px solid #ffcdd2;
+                      padding:16px;border-radius:10px;font-size:0.9rem;
+                      max-width:500px;margin:0 auto;text-align:left;">
+            ❌ Error: <strong>${err.code || 'unknown'}</strong><br>${err.message}
+          </div>`;
+      }
     }
+
+    loadAchievements();
   </script>
 
   <script src="js/main.js"></script>
