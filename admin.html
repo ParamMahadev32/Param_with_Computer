@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin | Messages</title>
+  <title>Admin | Dashboard</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 
   <!-- HEADER -->
   <header class="header">
-    <a href="index.html" class="logo">RM.</a>
+    <a href="index.html" class="logo">RP.</a>
     <nav>
       <a href="index.html">← Back to Portfolio</a>
     </nav>
@@ -27,31 +27,197 @@
     <div class="login-card glass-card">
       <div class="login-icon">🔐</div>
       <h2>Admin Access</h2>
-      <p>Enter password to view messages</p>
+      <p>Enter password to access dashboard</p>
       <div class="form-group">
         <input type="password" id="admin-password" placeholder="Enter password">
       </div>
       <button class="btn" onclick="checkPassword()">Login</button>
-      <p id="login-error" class="login-error" style="display:none;">
-        ❌ Wrong password
-      </p>
+      <p id="login-error" class="login-error" style="display:none;">❌ Wrong password</p>
     </div>
   </div>
 
 
-  <!-- MESSAGES SCREEN -->
-  <div id="messages-screen" style="display:none;">
+  <!-- DASHBOARD -->
+  <div id="dashboard" style="display:none;">
+
     <div class="admin-hero">
       <p class="tag">Admin Panel</p>
-      <h1>All Messages</h1>
-      <p id="msg-count" class="msg-count">Loading...</p>
+      <h1>Dashboard</h1>
     </div>
-    <div class="messages-wrapper">
-      <div id="messages-list">
-        <div class="loading">⏳ Fetching messages...</div>
+
+    <!-- TABS -->
+    <div class="tabs-wrapper">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('messages')">💬 Messages</button>
+        <button class="tab-btn" onclick="switchTab('projects')">🚀 Projects</button>
+        <button class="tab-btn" onclick="switchTab('skills')">⚡ Skills</button>
+        <button class="tab-btn" onclick="switchTab('achievements')">🏆 Achievements</button>
       </div>
     </div>
-  </div>
+
+
+    <!-- TAB: MESSAGES -->
+    <div id="tab-messages" class="tab-content active">
+      <div class="section-wrapper">
+        <p id="msg-count" class="msg-count">Loading...</p>
+        <div id="messages-list">
+          <div class="loading">⏳ Fetching messages...</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- TAB: PROJECTS -->
+    <div id="tab-projects" class="tab-content">
+      <div class="section-wrapper">
+
+        <!-- Add Project Form -->
+        <div class="add-form glass-card">
+          <h3>➕ Add New Project</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Icon (emoji)</label>
+              <input type="text" id="p-icon" placeholder="🌐" maxlength="2">
+            </div>
+            <div class="form-group">
+              <label>Tag</label>
+              <input type="text" id="p-tag" placeholder="Web / AI / ML">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Project Name</label>
+            <input type="text" id="p-name" placeholder="My Awesome Project">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="p-desc" placeholder="Short description..." rows="3"></textarea>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Live Demo URL</label>
+              <input type="url" id="p-demo" placeholder="https://...">
+            </div>
+            <div class="form-group">
+              <label>GitHub URL</label>
+              <input type="url" id="p-github" placeholder="https://github.com/...">
+            </div>
+          </div>
+          <button class="btn" onclick="addProject()">Add Project</button>
+          <p id="p-success" class="form-success" style="display:none;">✅ Project added!</p>
+          <p id="p-error" class="form-error" style="display:none;">❌ Error adding project.</p>
+        </div>
+
+        <!-- Projects List -->
+        <div id="projects-list" class="items-list">
+          <div class="loading">⏳ Fetching projects...</div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- TAB: SKILLS -->
+    <div id="tab-skills" class="tab-content">
+      <div class="section-wrapper">
+
+        <!-- Add Skill Form -->
+        <div class="add-form glass-card">
+          <h3>➕ Add New Skill</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Icon (emoji)</label>
+              <input type="text" id="s-icon" placeholder="⚡" maxlength="2">
+            </div>
+            <div class="form-group">
+              <label>Category</label>
+              <select id="s-category">
+                <option value="Web Development">Web Development</option>
+                <option value="Programming & AI">Programming & AI</option>
+                <option value="Cloud & DevOps">Cloud & DevOps</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Skill Name</label>
+              <input type="text" id="s-name" placeholder="JavaScript">
+            </div>
+            <div class="form-group">
+              <label>Level</label>
+              <select id="s-level">
+                <option value="Expert">Expert</option>
+                <option value="Advanced">Advanced</option>
+                <option value="Intermediate">Intermediate</option>
+                <option value="Beginner">Beginner</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Progress: <span id="s-progress-val">80</span>%</label>
+            <input type="range" id="s-progress" min="10" max="100" value="80"
+              oninput="document.getElementById('s-progress-val').textContent = this.value">
+          </div>
+          <button class="btn" onclick="addSkill()">Add Skill</button>
+          <p id="s-success" class="form-success" style="display:none;">✅ Skill added!</p>
+          <p id="s-error" class="form-error" style="display:none;">❌ Error adding skill.</p>
+        </div>
+
+        <!-- Skills List -->
+        <div id="skills-list" class="items-list">
+          <div class="loading">⏳ Fetching skills...</div>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- TAB: ACHIEVEMENTS -->
+    <div id="tab-achievements" class="tab-content">
+      <div class="section-wrapper">
+
+        <!-- Add Achievement Form -->
+        <div class="add-form glass-card">
+          <h3>➕ Add New Achievement</h3>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Tag</label>
+              <input type="text" id="a-tag" placeholder="Certification / Award">
+            </div>
+            <div class="form-group">
+              <label>Year</label>
+              <input type="text" id="a-year" placeholder="2025">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="a-title" placeholder="Achievement Title">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea id="a-desc" placeholder="What did you achieve..." rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Issued By</label>
+            <input type="text" id="a-org" placeholder="Organization Name">
+          </div>
+          <div class="form-group">
+            <label>Image URL (optional)</label>
+            <input type="url" id="a-img" placeholder="https://... or leave empty">
+          </div>
+          <button class="btn" onclick="addAchievement()">Add Achievement</button>
+          <p id="a-success" class="form-success" style="display:none;">✅ Achievement added!</p>
+          <p id="a-error" class="form-error" style="display:none;">❌ Error adding achievement.</p>
+        </div>
+
+        <!-- Achievements List -->
+        <div id="achievements-list" class="items-list">
+          <div class="loading">⏳ Fetching achievements...</div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /dashboard -->
 
 
   <!-- FOOTER -->
@@ -60,7 +226,7 @@
   </footer>
 
 
-  <!-- PASSWORD -->
+  <!-- PASSWORD + TABS -->
   <script>
     const ADMIN_PASSWORD = "RamSita@Army21";
 
@@ -68,8 +234,11 @@
       const input = document.getElementById('admin-password').value;
       if (input === ADMIN_PASSWORD) {
         document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('messages-screen').style.display = 'block';
+        document.getElementById('dashboard').style.display = 'block';
         loadMessages();
+        loadProjects();
+        loadSkills();
+        loadAchievements();
       } else {
         document.getElementById('login-error').style.display = 'block';
       }
@@ -79,6 +248,13 @@
       .addEventListener('keydown', (e) => {
         if (e.key === 'Enter') checkPassword();
       });
+
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tab).classList.add('active');
+      event.target.classList.add('active');
+    }
   </script>
 
 
@@ -87,7 +263,10 @@
     import { initializeApp }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-    import { getFirestore, collection, getDocs, orderBy, query, deleteDoc, doc, Timestamp }
+    import {
+      getFirestore, collection, getDocs, addDoc,
+      deleteDoc, doc, orderBy, query, serverTimestamp
+    }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -103,69 +282,39 @@
     const app = initializeApp(firebaseConfig);
     const db  = getFirestore(app);
 
-    // FORMAT DATE — handles both Firestore Timestamp and JS Date
+    // ── FORMAT DATE ──
     function formatDate(createdAt) {
       try {
-        let date;
-
         if (!createdAt) return 'Unknown date';
-
-        // Firestore Timestamp
-        if (typeof createdAt.toDate === 'function') {
-          date = createdAt.toDate();
-        }
-        // JS Date object stored directly
-        else if (createdAt instanceof Date) {
-          date = createdAt;
-        }
-        // Firestore stores as seconds + nanoseconds object
-        else if (createdAt.seconds) {
-          date = new Date(createdAt.seconds * 1000);
-        }
-        // String or number fallback
-        else {
-          date = new Date(createdAt);
-        }
-
+        let date;
+        if (typeof createdAt.toDate === 'function') date = createdAt.toDate();
+        else if (createdAt.seconds) date = new Date(createdAt.seconds * 1000);
+        else date = new Date(createdAt);
         if (isNaN(date)) return 'Unknown date';
-
         return date.toLocaleString('en-IN', {
-          day:    '2-digit',
-          month:  'short',
-          year:   'numeric',
-          hour:   '2-digit',
-          minute: '2-digit',
-          hour12: true
+          day: '2-digit', month: 'short', year: 'numeric',
+          hour: '2-digit', minute: '2-digit', hour12: true
         });
-
-      } catch (e) {
-        return 'Unknown date';
-      }
+      } catch { return 'Unknown date'; }
     }
 
+    // ══════════════════════════════
+    // MESSAGES
+    // ══════════════════════════════
     window.loadMessages = async () => {
       const list    = document.getElementById('messages-list');
       const counter = document.getElementById('msg-count');
-
       try {
         const q    = query(collection(db, "messages"), orderBy("createdAt", "desc"));
         const snap = await getDocs(q);
         const msgs = snap.docs;
-
         counter.textContent = `${msgs.length} message${msgs.length !== 1 ? 's' : ''} received`;
-
-        if (msgs.length === 0) {
-          list.innerHTML = '<div class="no-messages">📭 No messages yet.</div>';
-          return;
-        }
-
+        if (msgs.length === 0) { list.innerHTML = '<div class="no-messages">📭 No messages yet.</div>'; return; }
         list.innerHTML = '';
-
         msgs.forEach(docSnap => {
           const d    = docSnap.data();
           const id   = docSnap.id;
           const date = formatDate(d.createdAt);
-
           const card = document.createElement('div');
           card.className = 'message-card glass-card';
           card.innerHTML = `
@@ -179,35 +328,211 @@
             </div>
             <p class="msg-body">${d.message || 'No message'}</p>
             <div class="msg-actions">
-              <a href="mailto:${d.email}?subject=Re: Your message&body=Hi ${d.name},"
-                 class="btn">Reply</a>
+              <a href="mailto:${d.email}?subject=Re: Your message&body=Hi ${d.name}," class="btn">Reply</a>
               <button class="btn-outline delete-btn" data-id="${id}">🗑 Delete</button>
-            </div>
-          `;
+            </div>`;
           list.appendChild(card);
         });
-
-        // Delete
         document.querySelectorAll('.delete-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
-            const id = btn.getAttribute('data-id');
             if (confirm('Delete this message?')) {
-              await deleteDoc(doc(db, "messages", id));
+              await deleteDoc(doc(db, "messages", btn.dataset.id));
               btn.closest('.message-card').remove();
-              const remaining = document.querySelectorAll('.message-card').length;
-              counter.textContent = `${remaining} message${remaining !== 1 ? 's' : ''} received`;
+              const r = document.querySelectorAll('.message-card').length;
+              counter.textContent = `${r} message${r !== 1 ? 's' : ''} received`;
             }
           });
         });
-
       } catch (err) {
-        console.error("Firebase error:", err);
-        list.innerHTML = `<div class="no-messages">❌ Error: ${err.message}</div>`;
+        console.error(err);
+        list.innerHTML = `<div class="no-messages">❌ ${err.message}</div>`;
       }
     };
+
+    // ══════════════════════════════
+    // PROJECTS
+    // ══════════════════════════════
+    window.addProject = async () => {
+      const icon   = document.getElementById('p-icon').value.trim()   || '🚀';
+      const tag    = document.getElementById('p-tag').value.trim()    || 'Project';
+      const name   = document.getElementById('p-name').value.trim();
+      const desc   = document.getElementById('p-desc').value.trim();
+      const demo   = document.getElementById('p-demo').value.trim()   || '#';
+      const github = document.getElementById('p-github').value.trim() || '#';
+
+      if (!name || !desc) { alert('Name and description are required!'); return; }
+
+      try {
+        await addDoc(collection(db, "projects"), {
+          icon, tag, name, desc, demo, github,
+          createdAt: serverTimestamp()
+        });
+        document.getElementById('p-success').style.display = 'block';
+        document.getElementById('p-error').style.display   = 'none';
+        setTimeout(() => document.getElementById('p-success').style.display = 'none', 3000);
+        ['p-icon','p-tag','p-name','p-desc','p-demo','p-github'].forEach(id => document.getElementById(id).value = '');
+        loadProjects();
+      } catch (err) {
+        document.getElementById('p-error').style.display = 'block';
+        console.error(err);
+      }
+    };
+
+    window.loadProjects = async () => {
+      const list = document.getElementById('projects-list');
+      try {
+        const snap = await getDocs(query(collection(db, "projects"), orderBy("createdAt", "desc")));
+        if (snap.empty) { list.innerHTML = '<div class="no-messages">📭 No projects yet. Add one above.</div>'; return; }
+        list.innerHTML = '';
+        snap.forEach(docSnap => {
+          const d  = docSnap.data();
+          const id = docSnap.id;
+          const el = document.createElement('div');
+          el.className = 'item-card glass-card';
+          el.innerHTML = `
+            <div class="item-left">
+              <div class="item-icon">${d.icon}</div>
+              <div class="item-info">
+                <span class="item-tag">${d.tag}</span>
+                <h4>${d.name}</h4>
+                <p>${d.desc}</p>
+              </div>
+            </div>
+            <button class="btn-outline delete-item" data-id="${id}" data-col="projects">🗑</button>`;
+          list.appendChild(el);
+        });
+        attachDeleteListeners();
+      } catch (err) { console.error(err); }
+    };
+
+    // ══════════════════════════════
+    // SKILLS
+    // ══════════════════════════════
+    window.addSkill = async () => {
+      const icon     = document.getElementById('s-icon').value.trim()     || '⚡';
+      const name     = document.getElementById('s-name').value.trim();
+      const category = document.getElementById('s-category').value;
+      const level    = document.getElementById('s-level').value;
+      const progress = document.getElementById('s-progress').value;
+
+      if (!name) { alert('Skill name is required!'); return; }
+
+      try {
+        await addDoc(collection(db, "skills"), {
+          icon, name, category, level, progress: Number(progress),
+          createdAt: serverTimestamp()
+        });
+        document.getElementById('s-success').style.display = 'block';
+        document.getElementById('s-error').style.display   = 'none';
+        setTimeout(() => document.getElementById('s-success').style.display = 'none', 3000);
+        ['s-icon','s-name'].forEach(id => document.getElementById(id).value = '');
+        loadSkills();
+      } catch (err) {
+        document.getElementById('s-error').style.display = 'block';
+        console.error(err);
+      }
+    };
+
+    window.loadSkills = async () => {
+      const list = document.getElementById('skills-list');
+      try {
+        const snap = await getDocs(query(collection(db, "skills"), orderBy("createdAt", "desc")));
+        if (snap.empty) { list.innerHTML = '<div class="no-messages">📭 No skills yet. Add one above.</div>'; return; }
+        list.innerHTML = '';
+        snap.forEach(docSnap => {
+          const d  = docSnap.data();
+          const id = docSnap.id;
+          const el = document.createElement('div');
+          el.className = 'item-card glass-card';
+          el.innerHTML = `
+            <div class="item-left">
+              <div class="item-icon">${d.icon}</div>
+              <div class="item-info">
+                <span class="item-tag">${d.category}</span>
+                <h4>${d.name}</h4>
+                <p>${d.level} — ${d.progress}%</p>
+              </div>
+            </div>
+            <button class="btn-outline delete-item" data-id="${id}" data-col="skills">🗑</button>`;
+          list.appendChild(el);
+        });
+        attachDeleteListeners();
+      } catch (err) { console.error(err); }
+    };
+
+    // ══════════════════════════════
+    // ACHIEVEMENTS
+    // ══════════════════════════════
+        window.addAchievement = async () => {
+      const tag  = document.getElementById('a-tag').value.trim()   || 'Achievement';
+      const year = document.getElementById('a-year').value.trim()  || '';
+      const title= document.getElementById('a-title').value.trim();
+      const desc = document.getElementById('a-desc').value.trim();
+      const org  = document.getElementById('a-org').value.trim()   || '';
+      const img  = document.getElementById('a-img').value.trim()   || '';
+
+      if (!title || !desc) { alert('Title and description are required!'); return; }
+
+      try {
+        await addDoc(collection(db, "achievements"), {
+          tag, year, title, desc, org, img,
+          createdAt: serverTimestamp()
+        });
+        document.getElementById('a-success').style.display = 'block';
+        document.getElementById('a-error').style.display   = 'none';
+        setTimeout(() => document.getElementById('a-success').style.display = 'none', 3000);
+        ['a-tag','a-year','a-title','a-desc','a-org','a-img'].forEach(id => document.getElementById(id).value = '');
+        loadAchievements();
+      } catch (err) {
+        document.getElementById('a-error').style.display = 'block';
+        console.error(err);
+      }
+    };
+
+    window.loadAchievements = async () => {
+      const list = document.getElementById('achievements-list');
+      try {
+        const snap = await getDocs(query(collection(db, "achievements"), orderBy("createdAt", "desc")));
+        if (snap.empty) { list.innerHTML = '<div class="no-messages">📭 No achievements yet. Add one above.</div>'; return; }
+        list.innerHTML = '';
+        snap.forEach(docSnap => {
+          const d  = docSnap.data();
+          const id = docSnap.id;
+          const el = document.createElement('div');
+          el.className = 'item-card glass-card';
+          el.innerHTML = `
+            <div class="item-left">
+              <div class="item-icon">🏆</div>
+              <div class="item-info">
+                <span class="item-tag">${d.tag} — ${d.year}</span>
+                <h4>${d.title}</h4>
+                <p>${d.org}</p>
+              </div>
+            </div>
+            <button class="btn-outline delete-item" data-id="${id}" data-col="achievements">🗑</button>`;
+          list.appendChild(el);
+        });
+        attachDeleteListeners();
+      } catch (err) { console.error(err); }
+    };
+
+    // ── DELETE ANY ITEM ──
+    function attachDeleteListeners() {
+      document.querySelectorAll('.delete-item').forEach(btn => {
+        btn.onclick = async () => {
+          if (confirm('Delete this item?')) {
+            await deleteDoc(doc(db, btn.dataset.col, btn.dataset.id));
+            btn.closest('.item-card').remove();
+          }
+        };
+      });
+    }
+
   </script>
 
   <script src="js/main.js"></script>
 
 </body>
 </html>
+
+      
