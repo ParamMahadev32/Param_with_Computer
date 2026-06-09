@@ -37,17 +37,9 @@
 
   <!-- PROJECTS -->
   <div class="projects-wrapper">
-
-    <div id="projects-loading" class="page-loading">
-      ⏳ Loading projects...
-    </div>
-
-    <div id="projects-empty" class="page-empty" style="display:none;">
-      📭 No projects yet. Check back soon!
-    </div>
-
+    <div id="projects-loading" class="page-loading">⏳ Loading projects...</div>
+    <div id="projects-empty" class="page-empty" style="display:none;">📭 No projects yet.</div>
     <div id="projects-grid" class="projects-grid" style="display:none;"></div>
-
   </div>
 
 
@@ -75,58 +67,61 @@
       measurementId: "G-7PRWGR9K5K"
     };
 
-    const loading = document.getElementById('projects-loading');
-    const empty   = document.getElementById('projects-empty');
-    const grid    = document.getElementById('projects-grid');
+    async function loadProjects() {
+      const loading = document.getElementById('projects-loading');
+      const empty   = document.getElementById('projects-empty');
+      const grid    = document.getElementById('projects-grid');
 
-    try {
-      const app  = initializeApp(firebaseConfig);
-      const db   = getFirestore(app);
-      const snap = await getDocs(collection(db, "projects"));
+      try {
+        const app  = initializeApp(firebaseConfig);
+        const db   = getFirestore(app);
+        const snap = await getDocs(collection(db, "projects"));
 
-      loading.style.display = 'none';
+        loading.style.display = 'none';
 
-      if (snap.empty) {
-        empty.style.display = 'block';
-        return;
+        if (snap.empty) {
+          empty.style.display = 'block';
+          return;
+        }
+
+        grid.style.display = 'grid';
+
+        snap.forEach((docSnap, i) => {
+          const d    = docSnap.data();
+          const card = document.createElement('div');
+          card.className = 'project-card';
+          card.style.animationDelay = `${i * 0.1}s`;
+          card.innerHTML = `
+            <div class="project-icon">${d.icon || '🚀'}</div>
+            <div class="project-info">
+              <span class="project-tag">${d.tag || 'Project'}</span>
+              <h2>${d.name}</h2>
+              <p>${d.desc}</p>
+            </div>
+            <div class="project-links">
+              ${d.demo && d.demo !== '#'
+                ? `<a href="${d.demo}" target="_blank" class="btn">Live Demo</a>`
+                : ''}
+              ${d.github && d.github !== '#'
+                ? `<a href="${d.github}" target="_blank" class="btn-outline">GitHub</a>`
+                : ''}
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+
+      } catch (err) {
+        const loading = document.getElementById('projects-loading');
+        loading.innerHTML = `
+          <div style="color:#c62828;background:#fff5f5;border:1px solid #ffcdd2;
+                      padding:16px;border-radius:10px;font-size:0.9rem;
+                      max-width:500px;margin:0 auto;text-align:left;">
+            ❌ Error: <strong>${err.code || 'unknown'}</strong><br>${err.message}
+          </div>`;
       }
-
-      grid.style.display = 'grid';
-
-      snap.forEach((docSnap, i) => {
-        const d    = docSnap.data();
-        const card = document.createElement('div');
-        card.className = 'project-card';
-        card.style.animationDelay = `${i * 0.1}s`;
-        card.innerHTML = `
-          <div class="project-icon">${d.icon || '🚀'}</div>
-          <div class="project-info">
-            <span class="project-tag">${d.tag || 'Project'}</span>
-            <h2>${d.name}</h2>
-            <p>${d.desc}</p>
-          </div>
-          <div class="project-links">
-            ${d.demo && d.demo !== '#'
-              ? `<a href="${d.demo}" target="_blank" class="btn">Live Demo</a>`
-              : ''}
-            ${d.github && d.github !== '#'
-              ? `<a href="${d.github}" target="_blank" class="btn-outline">GitHub</a>`
-              : ''}
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-
-    } catch (err) {
-      loading.innerHTML = `
-        <div style="color:#c62828; background:#fff5f5; border:1px solid #ffcdd2;
-                    padding:16px; border-radius:10px; font-size:0.9rem;
-                    max-width:500px; margin:0 auto; text-align:left;">
-          ❌ Firebase Error:<br><br>
-          <strong>${err.code || 'unknown'}</strong><br>
-          ${err.message}
-        </div>`;
     }
+
+    loadProjects();
   </script>
 
   <script src="js/main.js"></script>
