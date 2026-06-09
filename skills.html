@@ -37,17 +37,9 @@
 
   <!-- SKILLS -->
   <div class="skills-wrapper">
-
-    <div id="skills-loading" class="page-loading">
-      ⏳ Loading skills...
-    </div>
-
-    <div id="skills-empty" class="page-empty" style="display:none;">
-      📭 No skills yet. Check back soon!
-    </div>
-
+    <div id="skills-loading" class="page-loading">⏳ Loading skills...</div>
+    <div id="skills-empty"   class="page-empty"   style="display:none;">📭 No skills yet.</div>
     <div id="skills-content" style="display:none;"></div>
-
   </div>
 
 
@@ -75,88 +67,91 @@
       measurementId: "G-7PRWGR9K5K"
     };
 
-    const loading = document.getElementById('skills-loading');
-    const empty   = document.getElementById('skills-empty');
-    const content = document.getElementById('skills-content');
+    async function loadSkills() {
+      const loading = document.getElementById('skills-loading');
+      const empty   = document.getElementById('skills-empty');
+      const content = document.getElementById('skills-content');
 
-    try {
-      const app  = initializeApp(firebaseConfig);
-      const db   = getFirestore(app);
-      const snap = await getDocs(collection(db, "skills"));
+      try {
+        const app  = initializeApp(firebaseConfig);
+        const db   = getFirestore(app);
+        const snap = await getDocs(collection(db, "skills"));
 
-      loading.style.display = 'none';
+        loading.style.display = 'none';
 
-      if (snap.empty) {
-        empty.style.display = 'block';
-        return;
+        if (snap.empty) {
+          empty.style.display = 'block';
+          return;
+        }
+
+        content.style.display = 'block';
+
+        // Group by category
+        const categories = {};
+        snap.forEach(docSnap => {
+          const d   = docSnap.data();
+          const cat = d.category || 'Other';
+          if (!categories[cat]) categories[cat] = [];
+          categories[cat].push(d);
+        });
+
+        // Render each category
+        Object.entries(categories).forEach(([cat, skills]) => {
+
+          const section = document.createElement('div');
+
+          const label = document.createElement('p');
+          label.className   = 'skills-category';
+          label.textContent = cat;
+          section.appendChild(label);
+
+          const grid = document.createElement('div');
+          grid.className = 'skills-grid';
+
+          skills.forEach((d, i) => {
+            const card = document.createElement('div');
+            card.className = 'skill-card';
+            card.style.animationDelay = `${i * 0.08}s`;
+            card.innerHTML = `
+              <div class="skill-icon">${d.icon || '⚡'}</div>
+              <span class="skill-name">${d.name}</span>
+              <div class="skill-bar-track">
+                <div class="skill-bar-fill" data-level="${d.progress || 50}"></div>
+              </div>
+              <span class="skill-level">${d.level || 'Intermediate'}</span>
+            `;
+            grid.appendChild(card);
+          });
+
+          section.appendChild(grid);
+          content.appendChild(section);
+        });
+
+        // Animate bars on scroll
+        const fills = document.querySelectorAll('.skill-bar-fill');
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.style.width = entry.target.dataset.level + '%';
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.3 });
+
+        fills.forEach(fill => observer.observe(fill));
+
+      } catch (err) {
+        const loading = document.getElementById('skills-loading');
+        loading.innerHTML = `
+          <div style="color:#c62828;background:#fff5f5;border:1px solid #ffcdd2;
+                      padding:16px;border-radius:10px;font-size:0.9rem;
+                      max-width:500px;margin:0 auto;text-align:left;">
+            ❌ Error: <strong>${err.code || 'unknown'}</strong><br>${err.message}
+          </div>`;
       }
-
-      content.style.display = 'block';
-
-      // Group by category
-      const categories = {};
-      snap.forEach(docSnap => {
-        const d   = docSnap.data();
-        const cat = d.category || 'Other';
-        if (!categories[cat]) categories[cat] = [];
-        categories[cat].push(d);
-      });
-
-      // Render each category
-      Object.entries(categories).forEach(([cat, skills]) => {
-
-        const section = document.createElement('div');
-
-        const label = document.createElement('p');
-        label.className = 'skills-category';
-        label.textContent = cat;
-        section.appendChild(label);
-
-        const grid = document.createElement('div');
-        grid.className = 'skills-grid';
-
-        skills.forEach((d, i) => {
-          const card = document.createElement('div');
-          card.className = 'skill-card';
-          card.style.animationDelay = `${i * 0.08}s`;
-          card.innerHTML = `
-            <div class="skill-icon">${d.icon || '⚡'}</div>
-            <span class="skill-name">${d.name}</span>
-            <div class="skill-bar-track">
-              <div class="skill-bar-fill" data-level="${d.progress || 50}"></div>
-            </div>
-            <span class="skill-level">${d.level || 'Intermediate'}</span>
-          `;
-          grid.appendChild(card);
-        });
-
-        section.appendChild(grid);
-        content.appendChild(section);
-      });
-
-      // Animate bars on scroll
-      const fills = document.querySelectorAll('.skill-bar-fill');
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.style.width = entry.target.dataset.level + '%';
-            observer.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.3 });
-
-      fills.forEach(fill => observer.observe(fill));
-
-    } catch (err) {
-      loading.innerHTML = `
-        <div style="color:#c62828; background:#fff5f5; border:1px solid #ffcdd2;
-                    padding:16px; border-radius:10px; font-size:0.9rem;
-                    max-width:500px; margin:0 auto; text-align:left;">
-          ❌ Firebase Error:<br><br>
-          <strong>${err.code || 'unknown'}</strong><br>
-          ${err.message}
-        </div>`;
     }
+
+    loadSkills();
   </script>
 
   <script src="js/main.js"></script>
