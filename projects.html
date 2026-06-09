@@ -35,20 +35,17 @@
   </div>
 
 
-  <!-- PROJECTS GRID -->
+  <!-- PROJECTS -->
   <div class="projects-wrapper">
 
-    <!-- Loading state -->
     <div id="projects-loading" class="page-loading">
       ⏳ Loading projects...
     </div>
 
-    <!-- Empty state -->
     <div id="projects-empty" class="page-empty" style="display:none;">
       📭 No projects yet. Check back soon!
     </div>
 
-    <!-- Grid -->
     <div id="projects-grid" class="projects-grid" style="display:none;"></div>
 
   </div>
@@ -65,7 +62,7 @@
     import { initializeApp }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-    import { getFirestore, collection, getDocs, orderBy, query }
+    import { getFirestore, collection, getDocs }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -86,9 +83,7 @@
     const grid    = document.getElementById('projects-grid');
 
     try {
-      const snap = await getDocs(
-        collection(db, "projects")
-      );
+      const snap = await getDocs(collection(db, "projects"));
 
       loading.style.display = 'none';
 
@@ -100,7 +95,7 @@
       grid.style.display = 'grid';
 
       snap.forEach((docSnap, i) => {
-        const d  = docSnap.data();
+        const d    = docSnap.data();
         const card = document.createElement('div');
         card.className = 'project-card';
         card.style.animationDelay = `${i * 0.1}s`;
