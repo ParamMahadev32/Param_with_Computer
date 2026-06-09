@@ -1,9 +1,9 @@
-7<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact | Ram Mahadev</title>
+  <title>Contact | Ram Pandhare</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -15,10 +15,13 @@
 
   <!-- HEADER -->
   <header class="header">
-    <a href="index.html" class="logo">RM.</a>
+    <a href="index.html" class="logo">RP.</a>
     <nav>
       <a href="index.html">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="skills.html">Skills</a>
       <a href="profile.html">Profile</a>
+      <a href="achievements.html">Achievements</a>
       <a href="contact.html" class="active">Contact</a>
     </nav>
   </header>
@@ -47,7 +50,7 @@
         <div>
           <span class="contact-label">Phone</span>
           <!-- ADD YOUR PHONE NUMBER HERE -->
-          <a href="tel:+917498801862">+91 XXXXX XXXXX</a>
+          <a href="tel:+91XXXXXXXXXX">+91 XXXXX XXXXX</a>
         </div>
       </div>
 
@@ -70,21 +73,43 @@
 
       <form id="contactForm">
 
-        <div class="form-group">
-          <label for="name">Your Name</label>
-          <input type="text" id="name" placeholder="Ram Mahadev Pandhare" required>
-        </div>
-<div class="form-group">
-          <label for="Mobile">Mobile Number </label>
-          <input type="Mobile" id="Mobile" placeholder="Number" required>
-</div>
-        <div class="form-group">
-          <label for="email">Your Email</label>
-          <input type="email" id="email" placeholder="you@email.com" required>
+        <!-- Row 1: Name + Organisation -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Full Name <span class="required">*</span></label>
+            <input type="text" id="name" placeholder="Ram Pandhare" required>
+          </div>
+          <div class="form-group">
+            <label for="organisation">Organisation
+              <span class="optional">(optional)</span>
+            </label>
+            <input type="text" id="organisation" placeholder="Company / College">
+          </div>
         </div>
 
+        <!-- Row 2: Phone + Email -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phone">Phone No
+              <span class="optional">(optional)</span>
+            </label>
+            <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX">
+          </div>
+          <div class="form-group">
+            <label for="email">Email <span class="required">*</span></label>
+            <input type="email" id="email" placeholder="you@email.com" required>
+          </div>
+        </div>
+
+        <!-- Subject -->
         <div class="form-group">
-          <label for="message">Your Message</label>
+          <label for="subject">Subject <span class="required">*</span></label>
+          <input type="text" id="subject" placeholder="Project Collaboration / Internship / Query" required>
+        </div>
+
+        <!-- Message -->
+        <div class="form-group">
+          <label for="message">Message <span class="required">*</span></label>
           <textarea id="message" placeholder="Hi Ram, I'd like to..." rows="5" required></textarea>
         </div>
 
@@ -94,7 +119,7 @@
         </button>
 
         <p id="form-success" class="form-success" style="display:none;">
-          ✅ Message sent successfully!
+          ✅ Message sent successfully! I'll get back to you soon.
         </p>
         <p id="form-error" class="form-error" style="display:none;">
           ❌ Something went wrong. Please try again.
@@ -104,7 +129,7 @@
 
     </div>
 
-  </div><!-- /contact-wrapper -->
+  </div>
 
 
   <!-- FOOTER -->
@@ -143,12 +168,14 @@
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const name    = document.getElementById("name").value.trim();
-      const Mobile  = document.getElementById("Mobile").value.trim();
-      const email   = document.getElementById("email").value.trim();
-      const message = document.getElementById("message").value.trim();
+      const name         = document.getElementById("name").value.trim();
+      const organisation = document.getElementById("organisation").value.trim();
+      const phone        = document.getElementById("phone").value.trim();
+      const email        = document.getElementById("email").value.trim();
+      const subject      = document.getElementById("subject").value.trim();
+      const message      = document.getElementById("message").value.trim();
 
-      // Show loading state
+      // Loading state
       btnText.style.display   = "none";
       btnLoader.style.display = "inline";
       successMsg.style.display = "none";
@@ -157,8 +184,10 @@
       try {
         await addDoc(collection(db, "messages"), {
           name,
-          Mobile,
+          organisation: organisation || null,
+          phone:        phone        || null,
           email,
+          subject,
           message,
           createdAt: new Date()
         });
@@ -177,13 +206,7 @@
     });
   </script>
 
-  <!-- SCROLL HEADER -->
-  <script>
-    const header = document.querySelector('.header');
-    window.addEventListener('scroll', () => {
-      header.classList.toggle('scrolled', window.scrollY > 10);
-    });
-  </script>
+  <script src="js/main.js"></script>
 
 </body>
 </html>
