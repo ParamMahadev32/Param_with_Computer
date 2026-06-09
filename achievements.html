@@ -38,17 +38,14 @@
   <!-- ACHIEVEMENTS -->
   <div class="achievements-wrapper">
 
-    <!-- Loading -->
     <div id="achievements-loading" class="page-loading">
       ⏳ Loading achievements...
     </div>
 
-    <!-- Empty -->
     <div id="achievements-empty" class="page-empty" style="display:none;">
       📭 No achievements yet. Check back soon!
     </div>
 
-    <!-- Content -->
     <div id="achievements-content" style="display:none;"></div>
 
   </div>
@@ -65,7 +62,7 @@
     import { initializeApp }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-    import { getFirestore, collection, getDocs, orderBy, query }
+    import { getFirestore, collection, getDocs }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -85,10 +82,20 @@
     const empty   = document.getElementById('achievements-empty');
     const content = document.getElementById('achievements-content');
 
+    // Emoji based on tag
+    function getEmoji(tag) {
+      if (!tag) return '🏆';
+      const t = tag.toLowerCase();
+      if (t.includes('certif'))    return '📜';
+      if (t.includes('award'))     return '🎖️';
+      if (t.includes('competit'))  return '🥇';
+      if (t.includes('hackathon')) return '💻';
+      if (t.includes('scholar'))   return '🎓';
+      return '🏆';
+    }
+
     try {
-      const snap = await getDocs(
-        collection(db, "achievements")
-      );
+      const snap = await getDocs(collection(db, "achievements"));
 
       loading.style.display = 'none';
 
@@ -100,8 +107,8 @@
       content.style.display = 'block';
 
       snap.forEach((docSnap, i) => {
-        const d   = docSnap.data();
-        const isReverse = i % 2 !== 0; // criss-cross alternate
+        const d         = docSnap.data();
+        const isReverse = i % 2 !== 0;
 
         const item = document.createElement('div');
         item.className = `achievement-item${isReverse ? ' reverse' : ''}`;
@@ -118,8 +125,12 @@
           </div>
           <div class="achievement-image ${d.img ? '' : 'img-fallback'}">
             ${d.img
-              ? `<img src="${d.img}" alt="${d.title}"
-                      onerror="this.parentElement.classList.add('img-fallback'); this.style.display='none';">`
+              ? `<img
+                  src="${d.img}"
+                  alt="${d.title}"
+                  onerror="this.parentElement.classList.add('img-fallback');
+                           this.style.display='none';"
+                >`
               : ''}
             <div class="img-placeholder">${getEmoji(d.tag)}</div>
           </div>
@@ -144,18 +155,6 @@
     } catch (err) {
       console.error(err);
       loading.textContent = '❌ Failed to load achievements.';
-    }
-
-    // Emoji based on tag
-    function getEmoji(tag) {
-      if (!tag) return '🏆';
-      const t = tag.toLowerCase();
-      if (t.includes('certif'))    return '📜';
-      if (t.includes('award'))     return '🎖️';
-      if (t.includes('competit'))  return '🥇';
-      if (t.includes('hackathon')) return '💻';
-      if (t.includes('scholar'))   return '🎓';
-      return '🏆';
     }
   </script>
 
