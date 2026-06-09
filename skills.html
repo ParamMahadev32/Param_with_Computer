@@ -38,17 +38,14 @@
   <!-- SKILLS -->
   <div class="skills-wrapper">
 
-    <!-- Loading -->
     <div id="skills-loading" class="page-loading">
       ⏳ Loading skills...
     </div>
 
-    <!-- Empty -->
     <div id="skills-empty" class="page-empty" style="display:none;">
       📭 No skills yet. Check back soon!
     </div>
 
-    <!-- Content -->
     <div id="skills-content" style="display:none;"></div>
 
   </div>
@@ -65,7 +62,7 @@
     import { initializeApp }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-    import { getFirestore, collection, getDocs, orderBy, query }
+    import { getFirestore, collection, getDocs }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -86,9 +83,7 @@
     const content = document.getElementById('skills-content');
 
     try {
-      const snap = await getDocs(
-        collection(db, "skills")
-      );
+      const snap = await getDocs(collection(db, "skills"));
 
       loading.style.display = 'none';
 
@@ -99,10 +94,10 @@
 
       content.style.display = 'block';
 
-      // Group skills by category
+      // Group by category
       const categories = {};
       snap.forEach(docSnap => {
-        const d = docSnap.data();
+        const d   = docSnap.data();
         const cat = d.category || 'Other';
         if (!categories[cat]) categories[cat] = [];
         categories[cat].push(d);
@@ -110,8 +105,13 @@
 
       // Render each category
       Object.entries(categories).forEach(([cat, skills]) => {
+
         const section = document.createElement('div');
-        section.innerHTML = `<p class="skills-category">${cat}</p>`;
+
+        const label = document.createElement('p');
+        label.className = 'skills-category';
+        label.textContent = cat;
+        section.appendChild(label);
 
         const grid = document.createElement('div');
         grid.className = 'skills-grid';
