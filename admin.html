@@ -326,7 +326,10 @@
               </div>
               <span class="msg-date">📅 ${date}</span>
             </div>
-            <p class="msg-body">${d.message || 'No message'}</p>
+            ${d.subject ? `<p class="msg-subject">📌 ${d.subject}</p>` : ''}
+${d.organisation ? `<p class="msg-extra">🏢 ${d.organisation}</p>` : ''}
+${d.phone ? `<p class="msg-extra">📞 ${d.phone}</p>` : ''}
+<p class="msg-body">${d.message || 'No message'}</p>
             <div class="msg-actions">
               <a href="mailto:${d.email}?subject=Re: Your message&body=Hi ${d.name}," class="btn">Reply</a>
               <button class="btn-outline delete-btn" data-id="${id}">🗑 Delete</button>
