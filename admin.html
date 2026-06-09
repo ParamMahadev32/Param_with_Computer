@@ -22,7 +22,7 @@
   </header>
 
 
-  <!-- LOGIN SCREEN -->
+  <!-- LOGIN -->
   <div id="login-screen" class="login-wrapper">
     <div class="login-card glass-card">
       <div class="login-icon">🔐</div>
@@ -48,10 +48,10 @@
     <!-- TABS -->
     <div class="tabs-wrapper">
       <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('messages')">💬 Messages</button>
-        <button class="tab-btn" onclick="switchTab('projects')">🚀 Projects</button>
-        <button class="tab-btn" onclick="switchTab('skills')">⚡ Skills</button>
-        <button class="tab-btn" onclick="switchTab('achievements')">🏆 Achievements</button>
+        <button class="tab-btn active" onclick="switchTab('messages', this)">💬 Messages</button>
+        <button class="tab-btn" onclick="switchTab('projects', this)">🚀 Projects</button>
+        <button class="tab-btn" onclick="switchTab('skills', this)">⚡ Skills</button>
+        <button class="tab-btn" onclick="switchTab('achievements', this)">🏆 Achievements</button>
       </div>
     </div>
 
@@ -71,7 +71,6 @@
     <div id="tab-projects" class="tab-content">
       <div class="section-wrapper">
 
-        <!-- Add Project Form -->
         <div class="add-form glass-card">
           <h3>➕ Add New Project</h3>
           <div class="form-row">
@@ -102,12 +101,11 @@
               <input type="url" id="p-github" placeholder="https://github.com/...">
             </div>
           </div>
-          <button class="btn" onclick="addProject()">Add Project</button>
+          <button class="btn" id="p-btn" onclick="addProject()">Add Project</button>
           <p id="p-success" class="form-success" style="display:none;">✅ Project added!</p>
-          <p id="p-error" class="form-error" style="display:none;">❌ Error adding project.</p>
+          <p id="p-error"   class="form-error"   style="display:none;">❌ Error adding project.</p>
         </div>
 
-        <!-- Projects List -->
         <div id="projects-list" class="items-list">
           <div class="loading">⏳ Fetching projects...</div>
         </div>
@@ -120,7 +118,6 @@
     <div id="tab-skills" class="tab-content">
       <div class="section-wrapper">
 
-        <!-- Add Skill Form -->
         <div class="add-form glass-card">
           <h3>➕ Add New Skill</h3>
           <div class="form-row">
@@ -157,12 +154,11 @@
             <input type="range" id="s-progress" min="10" max="100" value="80"
               oninput="document.getElementById('s-progress-val').textContent = this.value">
           </div>
-          <button class="btn" onclick="addSkill()">Add Skill</button>
+          <button class="btn" id="s-btn" onclick="addSkill()">Add Skill</button>
           <p id="s-success" class="form-success" style="display:none;">✅ Skill added!</p>
-          <p id="s-error" class="form-error" style="display:none;">❌ Error adding skill.</p>
+          <p id="s-error"   class="form-error"   style="display:none;">❌ Error adding skill.</p>
         </div>
 
-        <!-- Skills List -->
         <div id="skills-list" class="items-list">
           <div class="loading">⏳ Fetching skills...</div>
         </div>
@@ -175,7 +171,6 @@
     <div id="tab-achievements" class="tab-content">
       <div class="section-wrapper">
 
-        <!-- Add Achievement Form -->
         <div class="add-form glass-card">
           <h3>➕ Add New Achievement</h3>
           <div class="form-row">
@@ -201,15 +196,16 @@
             <input type="text" id="a-org" placeholder="Organization Name">
           </div>
           <div class="form-group">
-            <label>Image URL (optional)</label>
+            <label>Certificate Image</label>
+            <input type="file" id="a-img-file" accept="image/*">
+            <p class="field-hint">Or paste image URL below</p>
             <input type="url" id="a-img" placeholder="https://... or leave empty">
           </div>
-          <button class="btn" onclick="addAchievement()">Add Achievement</button>
+          <button class="btn" id="a-btn" onclick="addAchievement()">Add Achievement</button>
           <p id="a-success" class="form-success" style="display:none;">✅ Achievement added!</p>
-          <p id="a-error" class="form-error" style="display:none;">❌ Error adding achievement.</p>
+          <p id="a-error"   class="form-error"   style="display:none;">❌ Error adding achievement.</p>
         </div>
 
-        <!-- Achievements List -->
         <div id="achievements-list" class="items-list">
           <div class="loading">⏳ Fetching achievements...</div>
         </div>
@@ -234,7 +230,7 @@
       const input = document.getElementById('admin-password').value;
       if (input === ADMIN_PASSWORD) {
         document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('dashboard').style.display = 'block';
+        document.getElementById('dashboard').style.display    = 'block';
         loadMessages();
         loadProjects();
         loadSkills();
@@ -249,11 +245,11 @@
         if (e.key === 'Enter') checkPassword();
       });
 
-    function switchTab(tab) {
+    function switchTab(tab, btn) {
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
       document.getElementById('tab-' + tab).classList.add('active');
-      event.target.classList.add('active');
+      btn.classList.add('active');
     }
   </script>
 
@@ -264,10 +260,15 @@
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
     import {
-      getFirestore, collection, getDocs, addDoc,
-      deleteDoc, doc, orderBy, query, serverTimestamp
+      getFirestore, collection, getDocs,
+      addDoc, deleteDoc, doc, serverTimestamp
     }
     from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    import {
+      getStorage, ref, uploadBytes, getDownloadURL
+    }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyBEUaZ3a2jEjASA7tmWpaTOJod_SwbvZUg",
@@ -279,8 +280,9 @@
       measurementId: "G-7PRWGR9K5K"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db  = getFirestore(app);
+    const app     = initializeApp(firebaseConfig);
+    const db      = getFirestore(app);
+    const storage = getStorage(app);
 
     // ── FORMAT DATE ──
     function formatDate(createdAt) {
@@ -298,6 +300,18 @@
       } catch { return 'Unknown date'; }
     }
 
+    // ── DELETE ANY ITEM ──
+    function attachDeleteListeners() {
+      document.querySelectorAll('.delete-item').forEach(btn => {
+        btn.onclick = async () => {
+          if (confirm('Delete this item?')) {
+            await deleteDoc(doc(db, btn.dataset.col, btn.dataset.id));
+            btn.closest('.item-card').remove();
+          }
+        };
+      });
+    }
+
     // ══════════════════════════════
     // MESSAGES
     // ══════════════════════════════
@@ -305,16 +319,27 @@
       const list    = document.getElementById('messages-list');
       const counter = document.getElementById('msg-count');
       try {
-        const q    = query(collection(db, "messages"), orderBy("createdAt", "desc"));
-        const snap = await getDocs(q);
-        const msgs = snap.docs;
+        const snap = await getDocs(collection(db, "messages"));
+        const msgs = snap.docs.sort((a, b) => {
+          const at = a.data().createdAt?.seconds || 0;
+          const bt = b.data().createdAt?.seconds || 0;
+          return bt - at;
+        });
+
         counter.textContent = `${msgs.length} message${msgs.length !== 1 ? 's' : ''} received`;
-        if (msgs.length === 0) { list.innerHTML = '<div class="no-messages">📭 No messages yet.</div>'; return; }
+
+        if (msgs.length === 0) {
+          list.innerHTML = '<div class="no-messages">📭 No messages yet.</div>';
+          return;
+        }
+
         list.innerHTML = '';
+
         msgs.forEach(docSnap => {
           const d    = docSnap.data();
           const id   = docSnap.id;
           const date = formatDate(d.createdAt);
+
           const card = document.createElement('div');
           card.className = 'message-card glass-card';
           card.innerHTML = `
@@ -326,16 +351,20 @@
               </div>
               <span class="msg-date">📅 ${date}</span>
             </div>
-            ${d.subject ? `<p class="msg-subject">📌 ${d.subject}</p>` : ''}
-${d.organisation ? `<p class="msg-extra">🏢 ${d.organisation}</p>` : ''}
-${d.phone ? `<p class="msg-extra">📞 ${d.phone}</p>` : ''}
-<p class="msg-body">${d.message || 'No message'}</p>
+            ${d.subject      ? `<p class="msg-subject">📌 ${d.subject}</p>`      : ''}
+            ${d.organisation ? `<p class="msg-extra">🏢 ${d.organisation}</p>`   : ''}
+            ${d.phone        ? `<p class="msg-extra">📞 ${d.phone}</p>`          : ''}
+            <p class="msg-body">${d.message || 'No message'}</p>
             <div class="msg-actions">
-              <a href="mailto:${d.email}?subject=Re: Your message&body=Hi ${d.name}," class="btn">Reply</a>
+              <a href="mailto:${d.email}?subject=Re: ${d.subject || 'Your message'}&body=Hi ${d.name},"
+                 class="btn">Reply</a>
               <button class="btn-outline delete-btn" data-id="${id}">🗑 Delete</button>
-            </div>`;
+            </div>
+          `;
           list.appendChild(card);
         });
+
+        // Delete message
         document.querySelectorAll('.delete-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
             if (confirm('Delete this message?')) {
@@ -346,11 +375,13 @@ ${d.phone ? `<p class="msg-extra">📞 ${d.phone}</p>` : ''}
             }
           });
         });
+
       } catch (err) {
         console.error(err);
         list.innerHTML = `<div class="no-messages">❌ ${err.message}</div>`;
       }
     };
+
 
     // ══════════════════════════════
     // PROJECTS
@@ -365,6 +396,10 @@ ${d.phone ? `<p class="msg-extra">📞 ${d.phone}</p>` : ''}
 
       if (!name || !desc) { alert('Name and description are required!'); return; }
 
+      const btn = document.getElementById('p-btn');
+      btn.textContent = 'Adding...';
+      btn.disabled = true;
+
       try {
         await addDoc(collection(db, "projects"), {
           icon, tag, name, desc, demo, github,
@@ -373,19 +408,26 @@ ${d.phone ? `<p class="msg-extra">📞 ${d.phone}</p>` : ''}
         document.getElementById('p-success').style.display = 'block';
         document.getElementById('p-error').style.display   = 'none';
         setTimeout(() => document.getElementById('p-success').style.display = 'none', 3000);
-        ['p-icon','p-tag','p-name','p-desc','p-demo','p-github'].forEach(id => document.getElementById(id).value = '');
+        ['p-icon','p-tag','p-name','p-desc','p-demo','p-github']
+          .forEach(id => document.getElementById(id).value = '');
         loadProjects();
       } catch (err) {
         document.getElementById('p-error').style.display = 'block';
         console.error(err);
+      } finally {
+        btn.textContent = 'Add Project';
+        btn.disabled = false;
       }
     };
 
     window.loadProjects = async () => {
       const list = document.getElementById('projects-list');
       try {
-        const snap = await getDocs(query(collection(db, "projects"), orderBy("createdAt", "desc")));
-        if (snap.empty) { list.innerHTML = '<div class="no-messages">📭 No projects yet. Add one above.</div>'; return; }
+        const snap = await getDocs(collection(db, "projects"));
+        if (snap.empty) {
+          list.innerHTML = '<div class="no-messages">📭 No projects yet.</div>';
+          return;
+        }
         list.innerHTML = '';
         snap.forEach(docSnap => {
           const d  = docSnap.data();
@@ -394,25 +436,28 @@ ${d.phone ? `<p class="msg-extra">📞 ${d.phone}</p>` : ''}
           el.className = 'item-card glass-card';
           el.innerHTML = `
             <div class="item-left">
-              <div class="item-icon">${d.icon}</div>
+              <div class="item-icon">${d.icon || '🚀'}</div>
               <div class="item-info">
                 <span class="item-tag">${d.tag}</span>
                 <h4>${d.name}</h4>
                 <p>${d.desc}</p>
               </div>
             </div>
-            <button class="btn-outline delete-item" data-id="${id}" data-col="projects">🗑</button>`;
+            <button class="btn-outline delete-item"
+              data-id="${id}" data-col="projects">🗑</button>
+          `;
           list.appendChild(el);
         });
         attachDeleteListeners();
       } catch (err) { console.error(err); }
     };
 
+
     // ══════════════════════════════
     // SKILLS
     // ══════════════════════════════
     window.addSkill = async () => {
-      const icon     = document.getElementById('s-icon').value.trim()     || '⚡';
+      const icon     = document.getElementById('s-icon').value.trim()  || '⚡';
       const name     = document.getElementById('s-name').value.trim();
       const category = document.getElementById('s-category').value;
       const level    = document.getElementById('s-level').value;
@@ -420,9 +465,14 @@ ${d.phone ? `<p class="msg-extra">📞 ${d.phone}</p>` : ''}
 
       if (!name) { alert('Skill name is required!'); return; }
 
+      const btn = document.getElementById('s-btn');
+      btn.textContent = 'Adding...';
+      btn.disabled = true;
+
       try {
         await addDoc(collection(db, "skills"), {
-          icon, name, category, level, progress: Number(progress),
+          icon, name, category, level,
+          progress: Number(progress),
           createdAt: serverTimestamp()
         });
         document.getElementById('s-success').style.display = 'block';
@@ -433,14 +483,20 @@ ${d.phone ? `<p class="msg-extra">📞 ${d.phone}</p>` : ''}
       } catch (err) {
         document.getElementById('s-error').style.display = 'block';
         console.error(err);
+      } finally {
+        btn.textContent = 'Add Skill';
+        btn.disabled = false;
       }
     };
 
     window.loadSkills = async () => {
       const list = document.getElementById('skills-list');
       try {
-        const snap = await getDocs(query(collection(db, "skills"), orderBy("createdAt", "desc")));
-        if (snap.empty) { list.innerHTML = '<div class="no-messages">📭 No skills yet. Add one above.</div>'; return; }
+        const snap = await getDocs(collection(db, "skills"));
+        if (snap.empty) {
+          list.innerHTML = '<div class="no-messages">📭 No skills yet.</div>';
+          return;
+        }
         list.innerHTML = '';
         snap.forEach(docSnap => {
           const d  = docSnap.data();
@@ -449,54 +505,82 @@ ${d.phone ? `<p class="msg-extra">📞 ${d.phone}</p>` : ''}
           el.className = 'item-card glass-card';
           el.innerHTML = `
             <div class="item-left">
-              <div class="item-icon">${d.icon}</div>
+              <div class="item-icon">${d.icon || '⚡'}</div>
               <div class="item-info">
                 <span class="item-tag">${d.category}</span>
                 <h4>${d.name}</h4>
                 <p>${d.level} — ${d.progress}%</p>
               </div>
             </div>
-            <button class="btn-outline delete-item" data-id="${id}" data-col="skills">🗑</button>`;
+            <button class="btn-outline delete-item"
+              data-id="${id}" data-col="skills">🗑</button>
+          `;
           list.appendChild(el);
         });
         attachDeleteListeners();
       } catch (err) { console.error(err); }
     };
 
+
     // ══════════════════════════════
     // ACHIEVEMENTS
     // ══════════════════════════════
-        window.addAchievement = async () => {
-      const tag  = document.getElementById('a-tag').value.trim()   || 'Achievement';
-      const year = document.getElementById('a-year').value.trim()  || '';
-      const title= document.getElementById('a-title').value.trim();
-      const desc = document.getElementById('a-desc').value.trim();
-      const org  = document.getElementById('a-org').value.trim()   || '';
-      const img  = document.getElementById('a-img').value.trim()   || '';
+     window.addAchievement = async () => {
+      const tag   = document.getElementById('a-tag').value.trim()   || 'Achievement';
+      const year  = document.getElementById('a-year').value.trim()  || '';
+      const title = document.getElementById('a-title').value.trim();
+      const desc  = document.getElementById('a-desc').value.trim();
+      const org   = document.getElementById('a-org').value.trim()   || '';
+      const imgUrl= document.getElementById('a-img').value.trim()   || '';
+      const file  = document.getElementById('a-img-file').files[0];
 
       if (!title || !desc) { alert('Title and description are required!'); return; }
 
+      const btn = document.getElementById('a-btn');
+      btn.textContent = file ? 'Uploading...' : 'Adding...';
+      btn.disabled = true;
+
       try {
+        let finalImg = imgUrl;
+
+        // Upload file to Firebase Storage if selected
+        if (file) {
+          const fileRef = ref(storage, `achievements/${Date.now()}_${file.name}`);
+          await uploadBytes(fileRef, file);
+          finalImg = await getDownloadURL(fileRef);
+        }
+
         await addDoc(collection(db, "achievements"), {
-          tag, year, title, desc, org, img,
+          tag, year, title, desc, org,
+          img: finalImg || '',
           createdAt: serverTimestamp()
         });
+
         document.getElementById('a-success').style.display = 'block';
         document.getElementById('a-error').style.display   = 'none';
         setTimeout(() => document.getElementById('a-success').style.display = 'none', 3000);
-        ['a-tag','a-year','a-title','a-desc','a-org','a-img'].forEach(id => document.getElementById(id).value = '');
+        ['a-tag','a-year','a-title','a-desc','a-org','a-img']
+          .forEach(id => document.getElementById(id).value = '');
+        document.getElementById('a-img-file').value = '';
         loadAchievements();
+
       } catch (err) {
         document.getElementById('a-error').style.display = 'block';
         console.error(err);
+      } finally {
+        btn.textContent = 'Add Achievement';
+        btn.disabled = false;
       }
     };
 
     window.loadAchievements = async () => {
       const list = document.getElementById('achievements-list');
       try {
-        const snap = await getDocs(query(collection(db, "achievements"), orderBy("createdAt", "desc")));
-        if (snap.empty) { list.innerHTML = '<div class="no-messages">📭 No achievements yet. Add one above.</div>'; return; }
+        const snap = await getDocs(collection(db, "achievements"));
+        if (snap.empty) {
+          list.innerHTML = '<div class="no-messages">📭 No achievements yet.</div>';
+          return;
+        }
         list.innerHTML = '';
         snap.forEach(docSnap => {
           const d  = docSnap.data();
@@ -505,31 +589,25 @@ ${d.phone ? `<p class="msg-extra">📞 ${d.phone}</p>` : ''}
           el.className = 'item-card glass-card';
           el.innerHTML = `
             <div class="item-left">
-              <div class="item-icon">🏆</div>
+              ${d.img
+                ? `<div class="item-img">
+                     <img src="${d.img}" alt="${d.title}">
+                   </div>`
+                : `<div class="item-icon">🏆</div>`}
               <div class="item-info">
                 <span class="item-tag">${d.tag} — ${d.year}</span>
                 <h4>${d.title}</h4>
-                <p>${d.org}</p>
+                <p>${d.org || ''}</p>
               </div>
             </div>
-            <button class="btn-outline delete-item" data-id="${id}" data-col="achievements">🗑</button>`;
+            <button class="btn-outline delete-item"
+              data-id="${id}" data-col="achievements">🗑</button>
+          `;
           list.appendChild(el);
         });
         attachDeleteListeners();
       } catch (err) { console.error(err); }
     };
-
-    // ── DELETE ANY ITEM ──
-    function attachDeleteListeners() {
-      document.querySelectorAll('.delete-item').forEach(btn => {
-        btn.onclick = async () => {
-          if (confirm('Delete this item?')) {
-            await deleteDoc(doc(db, btn.dataset.col, btn.dataset.id));
-            btn.closest('.item-card').remove();
-          }
-        };
-      });
-    }
 
   </script>
 
@@ -537,5 +615,3 @@ ${d.phone ? `<p class="msg-extra">📞 ${d.phone}</p>` : ''}
 
 </body>
 </html>
-
-      
