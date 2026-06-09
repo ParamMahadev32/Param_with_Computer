@@ -149,3 +149,11 @@
     order: -1;
   }
 }
+/* Loading & Empty states */
+.page-loading,
+.page-empty {
+  text-align: center;
+  padding: 80px 24px;
+  color: #999;
+  font-size: 1rem;
+}
