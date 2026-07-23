@@ -1,0 +1,527 @@
+/* ============================================================
+   Ram Pandhare | Portfolio — style.css
+   Structure:
+   1. CSS Variables (Design Tokens)
+   2. Reset & Base
+   3. Typography
+   4. Layout Utilities
+   5. Header & Nav
+   6. Glass Card & Tech Grid
+   7. Buttons
+   8. Footer
+   9. Animations
+   10. Responsive / Media Queries
+   ============================================================ */
+
+
+/* ============================================================
+   1. CSS VARIABLES
+   ============================================================ */
+
+:root {
+  /* Brand Colors */
+  --clr-primary:        #e8621a;
+  --clr-primary-dark:   #cf5515;
+  --clr-primary-light:  rgba(232, 98, 26, 0.10);
+  --clr-primary-border: rgba(232, 98, 26, 0.20);
+  --clr-primary-glow:   rgba(232, 98, 26, 0.10);
+
+  /* Background */
+  --clr-bg:             #fff8f2;
+  --clr-bg-gradient:    radial-gradient(ellipse at top left, #ffe5cc 0%, #fff8f2 60%, #fff3ea 100%);
+
+  /* Text */
+  --clr-text-heading:   #111111;
+  --clr-text-body:      #444444;
+  --clr-text-muted:     #888888;
+  --clr-text-tag:       #c04f10;
+
+  /* Glass Card */
+  --clr-glass-bg:       rgba(255, 255, 255, 0.55);
+  --clr-glass-border:   rgba(255, 160, 80, 0.25);
+
+  /* Header */
+  --clr-header-bg:      rgba(255, 248, 242, 0.75);
+  --clr-header-border:  rgba(255, 160, 80, 0.15);
+
+  /* Dividers */
+  --clr-divider:        rgba(255, 160, 80, 0.15);
+
+  /* Typography */
+  --font-main:          'Inter', sans-serif;
+
+  /* Font Sizes */
+  --fs-xs:    0.75rem;
+  --fs-sm:    0.85rem;
+  --fs-base:  1rem;
+  --fs-md:    1.05rem;
+  --fs-lg:    1.2rem;
+  --fs-xl:    1.6rem;
+  --fs-2xl:   2.2rem;
+  --fs-3xl:   3.2rem;
+
+  /* Font Weights */
+  --fw-light:    300;
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+
+  /* Spacing Scale */
+  --sp-1:   4px;
+  --sp-2:   8px;
+  --sp-3:   12px;
+  --sp-4:   16px;
+  --sp-5:   20px;
+  --sp-6:   24px;
+  --sp-8:   32px;
+  --sp-9:   36px;
+  --sp-10:  40px;
+  --sp-12:  48px;
+  --sp-15:  60px;
+  --sp-20:  80px;
+  --sp-25:  100px;
+
+  /* Border Radius */
+  --radius-sm:   6px;
+  --radius-md:   10px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-card: 0 8px 40px rgba(232, 98, 26, 0.10);
+  --shadow-btn:  0 4px 16px rgba(232, 98, 26, 0.25);
+
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.25s ease;
+  --transition-slow: 0.4s ease;
+
+  /* Layout */
+  --max-width:     1200px;
+  --header-height: 72px;
+}
+
+
+/* ============================================================
+   2. RESET & BASE
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-main);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-regular);
+  color: var(--clr-text-body);
+  background-color: var(--clr-bg);
+  background-image: var(--clr-bg-gradient);
+  background-attachment: fixed;
+  min-height: 100vh;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img,
+video {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+
+/* ============================================================
+   3. TYPOGRAPHY
+   ============================================================ */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--clr-text-heading);
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+}
+
+h1 { font-size: var(--fs-3xl); font-weight: var(--fw-bold);     letter-spacing: -1.5px; }
+h2 { font-size: var(--fs-xl);  font-weight: var(--fw-semibold); }
+h3 { font-size: var(--fs-lg);  font-weight: var(--fw-semibold); }
+
+p {
+  color: var(--clr-text-body);
+  line-height: 1.7;
+}
+
+.text-muted   { color: var(--clr-text-muted); }
+.text-primary { color: var(--clr-primary); }
+.text-center  { text-align: center; }
+.text-sm      { font-size: var(--fs-sm); }
+
+
+/* ============================================================
+   4. LAYOUT UTILITIES
+   ============================================================ */
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--sp-15);
+}
+
+.flex         { display: flex; }
+.flex-center  { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-col     { display: flex; flex-direction: column; }
+.gap-2        { gap: var(--sp-2); }
+.gap-4        { gap: var(--sp-4); }
+.gap-6        { gap: var(--sp-6); }
+
+.section {
+  padding-block: var(--sp-25);
+}
+
+
+/* ============================================================
+   5. HEADER & NAV
+   ============================================================ */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 var(--sp-15);
+  height: var(--header-height);
+  background: var(--clr-header-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--clr-header-border);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: box-shadow var(--transition-base);
+}
+
+.header.scrolled {
+  box-shadow: 0 4px 24px rgba(232, 98, 26, 0.08);
+}
+
+/* Logo */
+.logo {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--clr-primary);
+  letter-spacing: -1px;
+  opacity: 1 !important;
+  transition: opacity var(--transition-fast);
+}
+
+.logo:hover {
+  opacity: 0.8 !important;
+}
+
+/* Nav Links */
+nav {
+  display: flex;
+  gap: var(--sp-9);
+  align-items: center;
+}
+
+nav a {
+  font-size: 0.95rem;
+  font-weight: var(--fw-medium);
+  color: var(--clr-text-body);
+  position: relative;
+  padding-bottom: 2px;
+  transition: color var(--transition-fast);
+}
+
+nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--clr-primary);
+  border-radius: var(--radius-pill);
+  transition: width var(--transition-base);
+}
+
+nav a:hover,
+nav a.active {
+  color: var(--clr-primary);
+}
+
+nav a:hover::after,
+nav a.active::after {
+  width: 100%;
+}
+
+
+/* ============================================================
+   6. GLASS CARD
+   ============================================================ */
+
+.glass-card {
+  background: var(--clr-glass-bg);
+  border: 1px solid var(--clr-glass-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-xl);
+  padding: var(--sp-9);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(232, 98, 26, 0.15);
+}
+
+
+/* ============================================================
+   7. BUTTONS
+   ============================================================ */
+
+.btn,
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  padding: 13px var(--sp-8);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  font-weight: var(--fw-semibold);
+  font-family: var(--font-main);
+  cursor: pointer;
+  transition: background var(--transition-base),
+              color var(--transition-base),
+              transform var(--transition-fast),
+              box-shadow var(--transition-base);
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+/* Filled */
+.btn {
+  background: var(--clr-primary);
+  color: #ffffff;
+  border: 2px solid var(--clr-primary);
+}
+
+.btn:hover {
+  background: var(--clr-primary-dark);
+  border-color: var(--clr-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-btn);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Outline */
+.btn-outline {
+  background: transparent;
+  color: var(--clr-primary);
+  border: 2px solid var(--clr-primary);
+}
+
+.btn-outline:hover {
+  background: var(--clr-primary-light);
+  transform: translateY(-2px);
+}
+
+.btn-outline:active {
+  transform: translateY(0);
+}
+
+/* Sizes */
+.btn-sm { padding: 8px var(--sp-5);  font-size: var(--fs-sm); }
+.btn-lg { padding: 16px var(--sp-10); font-size: var(--fs-md); }
+
+
+/* ============================================================
+   8. TAG PILL
+   ============================================================ */
+
+.tag {
+  display: inline-block;
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: 2px;
+  color: var(--clr-primary);
+  background: var(--clr-primary-light);
+  border: 1px solid var(--clr-primary-border);
+  padding: 6px var(--sp-4);
+  border-radius: var(--radius-pill);
+  margin-bottom: var(--sp-6);
+  text-transform: uppercase;
+}
+
+
+/* ============================================================
+   9. FOOTER
+   ============================================================ */
+
+footer {
+  text-align: center;
+  padding: var(--sp-8) var(--sp-15);
+  color: var(--clr-text-muted);
+  font-size: var(--fs-sm);
+  border-top: 1px solid var(--clr-divider);
+  background: rgba(255, 248, 242, 0.6);
+}
+
+footer p   { color: var(--clr-text-muted); }
+footer a   { color: var(--clr-primary); font-weight: var(--fw-medium); }
+footer a:hover { opacity: 0.75; }
+
+
+/* ============================================================
+   10. FORM SHARED STYLES
+   ============================================================ */
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--clr-primary-border);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.6);
+  font-family: var(--font-main);
+  font-size: 0.92rem;
+  color: #111;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  resize: none;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #bbb;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  border-color: var(--clr-primary);
+  box-shadow: 0 0 0 3px rgba(232, 98, 26, 0.10);
+  background: #fff;
+}
+
+.required { color: var(--clr-primary); font-size: 0.85rem; }
+.optional  { color: #aaa; font-size: 0.75rem; font-weight: 400; }
+
+.form-success {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #2e7d32;
+  background: #f0faf0;
+  border: 1px solid #c8e6c9;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  margin-top: 12px;
+}
+
+.form-error {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #c62828;
+  background: #fff5f5;
+  border: 1px solid #ffcdd2;
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  margin-top: 12px;
+}
+
+
+/* ============================================================
+   11. ANIMATIONS
+   ============================================================ */
+
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.anim-fade-up { animation: fadeSlideUp 0.7s ease both; }
+.anim-fade-in { animation: fadeIn 0.5s ease both; }
+.anim-delay-1 { animation-delay: 0.1s; }
+.anim-delay-2 { animation-delay: 0.2s; }
+.anim-delay-3 { animation-delay: 0.3s; }
+.anim-delay-4 { animation-delay: 0.4s; }
+
+
+/* ============================================================
+   12. RESPONSIVE
+   ============================================================ */
+
+@media (max-width: 1024px) {
+  :root { --fs-3xl: 2.6rem; }
+}
+
+@media (max-width: 768px) {
+  :root { --fs-3xl: 2.2rem; }
+
+  .header { padding-inline: var(--sp-6); }
+
+  nav { gap: var(--sp-5); }
+  nav a { font-size: var(--fs-sm); }
+}
+
+@media (max-width: 480px) {
+  :root { --fs-3xl: 1.9rem; }
+
+  nav { gap: var(--sp-3); }
+  nav a { font-size: 0.78rem; }
+
+  footer { padding-inline: var(--sp-5); }
+}
