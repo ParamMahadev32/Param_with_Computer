@@ -1,23 +1,63 @@
 /* achievements.css */
 
+/* PAGE HERO */
 .page-hero {
   text-align: center;
-  padding: 80px 24px 40px;
+  padding: 80px 24px 24px;
   animation: fadeSlideUp 0.6s ease both;
 }
 
 .page-hero .tag { margin-inline: auto; }
-.page-hero h1   { font-size: 2.8rem; margin-bottom: 14px; }
-.page-hero p    { color: #666; font-size: 1.05rem; max-width: 480px; margin-inline: auto; }
+.page-hero h1   { font-size: 2.8rem; margin-bottom: 10px; }
+.page-hero p    { color: #666; font-size: 1rem; max-width: 520px; margin-inline: auto; }
+
+/* FILTER */
+.filter-wrapper {
+  max-width: 1000px;
+  margin-inline: auto;
+  padding: 24px 24px 0;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-bottom: 4px;
+}
+
+.filter-btn {
+  padding: 8px 18px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  font-family: var(--font-main);
+  border: 1px solid var(--clr-primary-border);
+  border-radius: 999px;
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  border-color: var(--clr-primary);
+  color: var(--clr-primary);
+  background: var(--clr-primary-light);
+}
+
+.filter-btn.active {
+  background: var(--clr-primary);
+  border-color: var(--clr-primary);
+  color: #fff;
+}
 
 /* WRAPPER */
 .achievements-wrapper {
   max-width: 1000px;
   margin-inline: auto;
-  padding: 20px 24px 100px;
-  display: flex;
-  flex-direction: column;
-  gap: 60px;
+  padding: 28px 24px 100px;
 }
 
 /* LOADING & EMPTY */
@@ -29,139 +69,136 @@
   font-size: 1rem;
 }
 
-/* ACHIEVEMENT ITEM */
-.achievement-item {
+/* GRID */
+.achievements-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: center;
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
-.achievement-item.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* INFO CARD */
-.achievement-info {
+/* CARD */
+.achievement-card {
+  background: var(--clr-glass-bg);
+  border: 1px solid var(--clr-glass-border);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  height: 100%;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  animation: fadeSlideUp 0.5s ease both;
 }
 
-.achievement-tag {
-  display: inline-block;
-  font-size: 0.7rem;
+.achievement-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 36px rgba(232, 98, 26, 0.13);
+  border-color: rgba(232, 98, 26, 0.35);
+}
+
+/* IMAGE */
+.ac-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--clr-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.ac-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: #fff;
+  display: block;
+}
+
+.ac-img-placeholder {
+  font-size: 3rem;
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+.ac-image.no-img img {
+  display: none;
+}
+
+.ac-image.no-img .ac-img-placeholder {
+  opacity: 1;
+}
+
+/* BODY */
+.ac-body {
+  padding: 16px 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+/* TAGS */
+.ac-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.ac-tag {
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--clr-primary-border);
   color: var(--clr-primary);
   background: var(--clr-primary-light);
-  border: 1px solid var(--clr-primary-border);
-  padding: 4px 12px;
-  border-radius: 999px;
-  width: fit-content;
 }
 
-.achievement-info h2 {
-  font-size: 1.4rem;
+.cat-tag {
+  background: var(--clr-primary);
+  color: #fff;
+  border-color: var(--clr-primary);
+}
+
+/* TITLE */
+.ac-body h3 {
+  font-size: 0.95rem;
   font-weight: 700;
   color: #111;
   line-height: 1.3;
 }
 
-.achievement-info p {
-  font-size: 0.92rem;
-  color: #555;
-  line-height: 1.75;
-}
-
-/* META */
-.achievement-meta {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 4px;
-}
-
-.meta-item {
-  font-size: 0.83rem;
-  color: #777;
+/* ORG */
+.ac-org {
+  font-size: 0.82rem;
+  color: #888;
   font-weight: 500;
 }
 
-/* IMAGE */
-.achievement-image {
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  border: 1px solid var(--clr-glass-border);
-  background: var(--clr-primary-light);
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-shadow: var(--shadow-card);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* YEAR */
+.ac-year {
+  font-size: 0.75rem;
+  color: #aaa;
+  font-weight: 500;
+  margin-top: 4px;
 }
 
-.achievement-image:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 16px 48px rgba(232, 98, 26, 0.15);
-}
-
-.achievement-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  display: block;
-  background: #fff;
-}
-
-/* PLACEHOLDER */
-.img-placeholder {
-  font-size: 4rem;
-  position: absolute;
-  opacity: 0.4;
-  pointer-events: none;
-}
-
-.achievement-image.img-fallback img {
-  display: none;
-}
-
-.achievement-image.img-fallback .img-placeholder {
-  opacity: 1;
-}
-
-/* RESPONSIVE — tablet */
+/* RESPONSIVE */
 @media (max-width: 768px) {
-  .page-hero h1 { font-size: 2rem; }
-  .achievements-wrapper { gap: 40px; }
-
-  .achievement-item {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  /* Image always first on mobile */
-  .achievement-item .achievement-image {
-    order: 1;
-  }
-
-  .achievement-item .achievement-info {
-    order: 2;
-  }
+  .page-hero h1        { font-size: 2rem; }
+  .achievements-grid   { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .filter-buttons      { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 8px; }
+  .filter-wrapper      { padding-inline: 16px; }
 }
 
-/* RESPONSIVE — small mobile */
 @media (max-width: 480px) {
-  .achievements-wrapper  { padding-inline: 16px; }
-  .achievement-info h2   { font-size: 1.2rem; }
+  .achievements-grid { grid-template-columns: 1fr; }
+  .ac-body           { padding: 14px 16px 18px; }
 }
