@@ -3,58 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ram Mahadev | Portfolio</title>
+  <title>Ram Pandhare | Portfolio</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/index.css">
 </head>
 
 <body>
 
-  <!-- ===== HEADER ===== -->
+  <!-- HEADER -->
   <header class="header">
-
-    <a href="index.html" class="logo">RM.</a>
-
+    <a href="index.html" class="logo">RP.</a>
     <nav>
       <a href="index.html" class="active">Home</a>
+      <a href="projects.html">Projects</a>
+      <a href="skills.html">Skills</a>
       <a href="profile.html">Profile</a>
       <a href="achievements.html">Achievements</a>
-      <a href="skills.html">Skills</a>
+      <a href="contact.html">Contact</a>
     </nav>
-
   </header>
 
 
-  <!-- ===== HERO ===== -->
+  <!-- HERO -->
   <section class="hero">
 
     <div class="hero-left">
-
       <p class="tag">Software Developer</p>
-
       <h1>Building modern<br>digital experiences.</h1>
-
       <p class="desc">
         Passionate about web development, AI,
         cloud computing, and modern UI design.
       </p>
-
       <div class="hero-buttons">
         <a href="projects.html" class="btn">View Projects</a>
         <a href="contact.html" class="btn-outline">Contact Me</a>
       </div>
-
     </div>
 
     <div class="hero-right">
-
       <div class="glass-card">
-
         <h2>Tech Stack</h2>
-
         <div class="tech-grid">
           <span>HTML</span>
           <span>CSS</span>
@@ -63,7 +54,57 @@
           <span>AWS</span>
           <span>Python</span>
         </div>
+      </div>
+    </div>
 
+  </section>
+
+
+  <!-- INTERESTS SECTION -->
+  <section class="interests-section">
+
+    <div class="section-title">
+      <p class="tag">What Drives Me</p>
+      <h2>Areas of Interest</h2>
+      <p class="section-desc">Fields I am passionate about and constantly exploring.</p>
+    </div>
+
+    <div class="interests-grid">
+
+      <div class="interest-card glass-card">
+        <div class="interest-icon">🤖</div>
+        <h3>Artificial Intelligence</h3>
+        <p>Exploring machine learning, deep learning and intelligent systems that solve real world problems.</p>
+      </div>
+
+      <div class="interest-card glass-card">
+        <div class="interest-icon">🌐</div>
+        <h3>Web Development</h3>
+        <p>Building fast, modern and responsive web applications with clean code and great user experience.</p>
+      </div>
+
+      <div class="interest-card glass-card">
+        <div class="interest-icon">☁️</div>
+        <h3>Cloud Computing</h3>
+        <p>Designing scalable infrastructure using AWS and modern cloud platforms for reliable deployment.</p>
+      </div>
+
+      <div class="interest-card glass-card">
+        <div class="interest-icon">🔒</div>
+        <h3>Cybersecurity</h3>
+        <p>Understanding security threats, protecting systems and building secure digital environments.</p>
+      </div>
+
+      <div class="interest-card glass-card">
+        <div class="interest-icon">📊</div>
+        <h3>Data Science</h3>
+        <p>Analysing data, finding patterns and turning raw numbers into meaningful actionable insights.</p>
+      </div>
+
+      <div class="interest-card glass-card">
+        <div class="interest-icon">📱</div>
+        <h3>UI / UX Design</h3>
+        <p>Designing intuitive, beautiful interfaces that make technology feel simple and enjoyable to use.</p>
       </div>
 
     </div>
@@ -71,19 +112,96 @@
   </section>
 
 
-  <!-- ===== FOOTER ===== -->
+  <!-- QUICK STATS -->
+  <section class="stats-section">
+    <div class="stats-grid">
+
+      <div class="stat-card glass-card">
+        <span class="stat-number" id="stat-projects">0</span>
+        <span class="stat-label">Projects</span>
+      </div>
+
+      <div class="stat-card glass-card">
+        <span class="stat-number" id="stat-skills">0</span>
+        <span class="stat-label">Skills</span>
+      </div>
+
+      <div class="stat-card glass-card">
+        <span class="stat-number" id="stat-achievements">0</span>
+        <span class="stat-label">Certificates</span>
+      </div>
+
+      <div class="stat-card glass-card">
+        <span class="stat-number">1+</span>
+        <span class="stat-label">Years Experience</span>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- FOOTER -->
   <footer>
     <p>© 2026 Ram Mahadev Pandhare</p>
   </footer>
 
 
-  <!-- ===== SCROLL HEADER EFFECT ===== -->
-  <script>
-    const header = document.querySelector('.header');
-    window.addEventListener('scroll', () => {
-      header.classList.toggle('scrolled', window.scrollY > 10);
-    });
+  <!-- FIREBASE — STATS -->
+  <script type="module">
+    import { initializeApp }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+    import { getFirestore, collection, getDocs }
+    from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBEUaZ3a2jEjASA7tmWpaTOJod_SwbvZUg",
+      authDomain: "portfolio-contact-44e9b.firebaseapp.com",
+      projectId: "portfolio-contact-44e9b",
+      storageBucket: "portfolio-contact-44e9b.firebasestorage.app",
+      messagingSenderId: "964519094829",
+      appId: "1:964519094829:web:f941eba4c914cf00a8e6a4",
+      measurementId: "G-7PRWGR9K5K"
+    };
+
+    async function loadStats() {
+      try {
+        const app = initializeApp(firebaseConfig);
+        const db  = getFirestore(app);
+
+        const [projects, skills, achievements] = await Promise.all([
+          getDocs(collection(db, "projects")),
+          getDocs(collection(db, "skills")),
+          getDocs(collection(db, "achievements"))
+        ]);
+
+        animateCount('stat-projects',     projects.size);
+        animateCount('stat-skills',       skills.size);
+        animateCount('stat-achievements', achievements.size);
+
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    function animateCount(id, target) {
+      const el    = document.getElementById(id);
+      let current = 0;
+      const step  = Math.ceil(target / 30);
+      const timer = setInterval(() => {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(timer);
+        }
+        el.textContent = current + '+';
+      }, 50);
+    }
+
+    loadStats();
   </script>
+
+  <script src="js/main.js"></script>
 
 </body>
 </html>
