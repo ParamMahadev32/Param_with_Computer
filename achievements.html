@@ -31,15 +31,30 @@
   <div class="page-hero">
     <p class="tag">My Milestones</p>
     <h1>Achievements</h1>
-    <p>Certifications, awards and milestones I have earned along the way.</p>
+    <p id="achievements-subtitle">Certifications, awards and milestones I have earned along the way.</p>
   </div>
 
 
-  <!-- ACHIEVEMENTS -->
+  <!-- FILTER BUTTONS -->
+  <div class="filter-wrapper">
+    <div class="filter-buttons" id="filter-buttons">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="AI & ML">🤖 AI & ML</button>
+      <button class="filter-btn" data-cat="Python">🐍 Python</button>
+      <button class="filter-btn" data-cat="Web Development">🌐 Web Development</button>
+      <button class="filter-btn" data-cat="Cloud & DevOps">☁️ Cloud & DevOps</button>
+      <button class="filter-btn" data-cat="Data">📊 Data</button>
+      <button class="filter-btn" data-cat="Security">🔒 Security</button>
+      <button class="filter-btn" data-cat="Other">📌 Other</button>
+    </div>
+  </div>
+
+
+  <!-- ACHIEVEMENTS GRID -->
   <div class="achievements-wrapper">
     <div id="achievements-loading" class="page-loading">⏳ Loading achievements...</div>
     <div id="achievements-empty" class="page-empty" style="display:none;">📭 No achievements yet.</div>
-    <div id="achievements-content"></div>
+    <div id="achievements-grid" class="achievements-grid" style="display:none;"></div>
   </div>
 
 
@@ -67,21 +82,75 @@
       measurementId: "G-7PRWGR9K5K"
     };
 
-    function getEmoji(tag) {
-      if (!tag) return '🏆';
-      const t = tag.toLowerCase();
-      if (t.includes('certif'))    return '📜';
-      if (t.includes('award'))     return '🎖️';
-      if (t.includes('competit'))  return '🥇';
-      if (t.includes('hackathon')) return '💻';
-      if (t.includes('scholar'))   return '🎓';
-      return '🏆';
+    // Category emoji map
+    const catEmoji = {
+      'AI & ML':         '🤖',
+      'Python':          '🐍',
+      'Web Development': '🌐',
+      'Cloud & DevOps':  '☁️',
+      'Data':            '📊',
+      'Security':        '🔒',
+      'Other':           '📌'
+    };
+
+    function getEmoji(cat) {
+      return catEmoji[cat] || '🏆';
+    }
+
+    // All docs stored globally for filtering
+    let allDocs = [];
+
+    function renderGrid(docs) {
+      const grid  = document.getElementById('achievements-grid');
+      const empty = document.getElementById('achievements-empty');
+
+      if (docs.length === 0) {
+        grid.style.display  = 'none';
+        empty.style.display = 'block';
+        empty.textContent   = '📭 No achievements in this category.';
+        return;
+      }
+
+      empty.style.display = 'none';
+      grid.style.display  = 'grid';
+      grid.innerHTML      = '';
+
+      docs.forEach((d, i) => {
+        const card = document.createElement('div');
+        card.className = 'achievement-card';
+        card.style.animationDelay = `${i * 0.05}s`;
+
+        card.innerHTML = `
+          <div class="ac-image ${d.img ? '' : 'no-img'}">
+            ${d.img
+              ? `<img src="${d.img}" alt="${d.title}"
+                      onerror="this.parentElement.classList.add('no-img');
+                               this.style.display='none';">`
+              : ''}
+            <div class="ac-img-placeholder">${getEmoji(d.category || d.tag)}</div>
+          </div>
+          <div class="ac-body">
+            <div class="ac-tags">
+              ${d.category
+                ? `<span class="ac-tag cat-tag">${getEmoji(d.category)} ${d.category}</span>`
+                : ''}
+              ${d.tag && d.tag !== d.category
+                ? `<span class="ac-tag">${d.tag}</span>`
+                : ''}
+            </div>
+            <h3>${d.title}</h3>
+            <p class="ac-org">${d.org || ''}</p>
+            ${d.year ? `<span class="ac-year">📅 ${d.year}</span>` : ''}
+          </div>
+        `;
+
+        grid.appendChild(card);
+      });
     }
 
     async function loadAchievements() {
-      const loading = document.getElementById('achievements-loading');
-      const empty   = document.getElementById('achievements-empty');
-      const content = document.getElementById('achievements-content');
+      const loading  = document.getElementById('achievements-loading');
+      const subtitle = document.getElementById('achievements-subtitle');
 
       try {
         const app  = initializeApp(firebaseConfig);
@@ -90,84 +159,46 @@
 
         loading.style.display = 'none';
 
-        if (snap.empty) {
-          empty.style.display = 'block';
-          return;
-        }
+        snap.forEach(docSnap => allDocs.push(docSnap.data()));
 
-        // Convert to array first
-        const docs = [];
-        snap.forEach(docSnap => docs.push(docSnap.data()));
+        // Update subtitle count
+        subtitle.textContent =
+          `${allDocs.length} verified achievement${allDocs.length !== 1 ? 's' : ''} earned across various platforms.`;
 
-        // Render with index from sorted array
-        docs.forEach((d, i) => {
+        renderGrid(allDocs);
 
-          const item = document.createElement('div');
-
-          // Strictly alternate using index
-          // i=0 → image left, info right (normal)
-          // i=1 → info left, image right (reverse)
-          if (i % 2 === 0) {
-            // IMAGE LEFT — INFO RIGHT
-            item.className = 'achievement-item';
-            item.innerHTML = `
-              <div class="achievement-image ${d.img ? '' : 'img-fallback'}">
-                ${d.img ? `<img src="${d.img}" alt="${d.title}"
-                  onerror="this.parentElement.classList.add('img-fallback');this.style.display='none';">` : ''}
-                <div class="img-placeholder">${getEmoji(d.tag)}</div>
-              </div>
-              <div class="achievement-info glass-card">
-                <span class="achievement-tag">${d.tag || 'Achievement'}</span>
-                <h2>${d.title}</h2>
-                <p>${d.desc}</p>
-                <div class="achievement-meta">
-                  ${d.org  ? `<span class="meta-item">🏛️ Issued by: ${d.org}</span>`  : ''}
-                  ${d.year ? `<span class="meta-item">📅 Year: ${d.year}</span>` : ''}
-                </div>
-              </div>
-            `;
-          } else {
-            // INFO LEFT — IMAGE RIGHT
-            item.className = 'achievement-item';
-            item.innerHTML = `
-              <div class="achievement-info glass-card">
-                <span class="achievement-tag">${d.tag || 'Achievement'}</span>
-                <h2>${d.title}</h2>
-                <p>${d.desc}</p>
-                <div class="achievement-meta">
-                  ${d.org  ? `<span class="meta-item">🏛️ Issued by: ${d.org}</span>`  : ''}
-                  ${d.year ? `<span class="meta-item">📅 Year: ${d.year}</span>` : ''}
-                </div>
-              </div>
-              <div class="achievement-image ${d.img ? '' : 'img-fallback'}">
-                ${d.img ? `<img src="${d.img}" alt="${d.title}"
-                  onerror="this.parentElement.classList.add('img-fallback');this.style.display='none';">` : ''}
-                <div class="img-placeholder">${getEmoji(d.tag)}</div>
-              </div>
-            `;
+        // Add dynamic category buttons from data
+        const existingCats = new Set(
+          allDocs.map(d => d.category).filter(Boolean)
+        );
+        const filterBtns = document.getElementById('filter-buttons');
+        filterBtns.querySelectorAll('.filter-btn:not([data-cat="all"])').forEach(btn => {
+          if (!existingCats.has(btn.dataset.cat)) {
+            btn.style.display = 'none';
           }
-
-          content.appendChild(item);
         });
 
-        // Animate on scroll
-        const items = document.querySelectorAll('.achievement-item');
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-              observer.unobserve(entry.target);
-            }
-          });
-        }, { threshold: 0.1 });
+        // Filter click
+        filterBtns.querySelectorAll('.filter-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            filterBtns.querySelectorAll('.filter-btn')
+              .forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
 
-        items.forEach(item => observer.observe(item));
+            const cat = btn.dataset.cat;
+            const filtered = cat === 'all'
+              ? allDocs
+              : allDocs.filter(d => d.category === cat);
+
+            renderGrid(filtered);
+          });
+        });
 
       } catch (err) {
         loading.innerHTML = `
           <div style="color:#c62828;background:#fff5f5;border:1px solid #ffcdd2;
                       padding:16px;border-radius:10px;font-size:0.9rem;
-                      max-width:500px;margin:0 auto;text-align:left;">
+                      max-width:500px;margin:0 auto;">
             ❌ Error: <strong>${err.code || 'unknown'}</strong><br>${err.message}
           </div>`;
       }
