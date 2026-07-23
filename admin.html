@@ -173,35 +173,58 @@
 
         <div class="add-form glass-card">
           <h3>➕ Add New Achievement</h3>
+
           <div class="form-row">
             <div class="form-group">
-              <label>Tag</label>
-              <input type="text" id="a-tag" placeholder="Certification / Award">
+              <label>Category</label>
+              <select id="a-category">
+                <option value="AI & ML">🤖 AI & ML</option>
+                <option value="Python">🐍 Python</option>
+                <option value="Web Development">🌐 Web Development</option>
+                <option value="Cloud & DevOps">☁️ Cloud & DevOps</option>
+                <option value="Data">📊 Data</option>
+                <option value="Security">🔒 Security</option>
+                <option value="Other">📌 Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tag <span class="field-hint-inline">(e.g. Certificate / Award)</span></label>
+              <input type="text" id="a-tag" placeholder="Certificate">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label>Title</label>
+              <input type="text" id="a-title" placeholder="Python Essentials 1">
             </div>
             <div class="form-group">
               <label>Year</label>
-              <input type="text" id="a-year" placeholder="2025">
+              <input type="text" id="a-year" placeholder="2026">
             </div>
           </div>
-          <div class="form-group">
-            <label>Title</label>
-            <input type="text" id="a-title" placeholder="Achievement Title">
-          </div>
+
           <div class="form-group">
             <label>Description</label>
             <textarea id="a-desc" placeholder="What did you achieve..." rows="3"></textarea>
           </div>
+
           <div class="form-group">
             <label>Issued By</label>
-            <input type="text" id="a-org" placeholder="Organization Name">
+            <input type="text" id="a-org" placeholder="Cisco Networking Academy">
           </div>
+
           <div class="form-group">
             <label>Certificate Image</label>
             <input type="file" id="a-img-file" accept="image/*">
-            <p class="field-hint">Or paste image URL below</p>
-            <input type="url" id="a-img" placeholder="https://... or leave empty">
+            <p class="field-hint">Or paste GitHub raw image URL below</p>
+            <input type="url" id="a-img"
+              placeholder="https://raw.githubusercontent.com/...">
           </div>
-          <button class="btn" id="a-btn" onclick="addAchievement()">Add Achievement</button>
+
+          <button class="btn" id="a-btn" onclick="addAchievement()">
+            Add Achievement
+          </button>
           <p id="a-success" class="form-success" style="display:none;">✅ Achievement added!</p>
           <p id="a-error"   class="form-error"   style="display:none;">❌ Error adding achievement.</p>
         </div>
@@ -326,7 +349,8 @@
           return bt - at;
         });
 
-        counter.textContent = `${msgs.length} message${msgs.length !== 1 ? 's' : ''} received`;
+        counter.textContent =
+          `${msgs.length} message${msgs.length !== 1 ? 's' : ''} received`;
 
         if (msgs.length === 0) {
           list.innerHTML = '<div class="no-messages">📭 No messages yet.</div>';
@@ -334,12 +358,10 @@
         }
 
         list.innerHTML = '';
-
         msgs.forEach(docSnap => {
           const d    = docSnap.data();
           const id   = docSnap.id;
           const date = formatDate(d.createdAt);
-
           const card = document.createElement('div');
           card.className = 'message-card glass-card';
           card.innerHTML = `
@@ -351,9 +373,9 @@
               </div>
               <span class="msg-date">📅 ${date}</span>
             </div>
-            ${d.subject      ? `<p class="msg-subject">📌 ${d.subject}</p>`      : ''}
-            ${d.organisation ? `<p class="msg-extra">🏢 ${d.organisation}</p>`   : ''}
-            ${d.phone        ? `<p class="msg-extra">📞 ${d.phone}</p>`          : ''}
+            ${d.subject      ? `<p class="msg-subject">📌 ${d.subject}</p>`    : ''}
+            ${d.organisation ? `<p class="msg-extra">🏢 ${d.organisation}</p>` : ''}
+            ${d.phone        ? `<p class="msg-extra">📞 ${d.phone}</p>`        : ''}
             <p class="msg-body">${d.message || 'No message'}</p>
             <div class="msg-actions">
               <a href="mailto:${d.email}?subject=Re: ${d.subject || 'Your message'}&body=Hi ${d.name},"
@@ -364,14 +386,14 @@
           list.appendChild(card);
         });
 
-        // Delete message
         document.querySelectorAll('.delete-btn').forEach(btn => {
           btn.addEventListener('click', async () => {
             if (confirm('Delete this message?')) {
               await deleteDoc(doc(db, "messages", btn.dataset.id));
               btn.closest('.message-card').remove();
               const r = document.querySelectorAll('.message-card').length;
-              counter.textContent = `${r} message${r !== 1 ? 's' : ''} received`;
+              counter.textContent =
+                `${r} message${r !== 1 ? 's' : ''} received`;
             }
           });
         });
@@ -398,7 +420,7 @@
 
       const btn = document.getElementById('p-btn');
       btn.textContent = 'Adding...';
-      btn.disabled = true;
+      btn.disabled    = true;
 
       try {
         await addDoc(collection(db, "projects"), {
@@ -407,7 +429,8 @@
         });
         document.getElementById('p-success').style.display = 'block';
         document.getElementById('p-error').style.display   = 'none';
-        setTimeout(() => document.getElementById('p-success').style.display = 'none', 3000);
+        setTimeout(() =>
+          document.getElementById('p-success').style.display = 'none', 3000);
         ['p-icon','p-tag','p-name','p-desc','p-demo','p-github']
           .forEach(id => document.getElementById(id).value = '');
         loadProjects();
@@ -416,7 +439,7 @@
         console.error(err);
       } finally {
         btn.textContent = 'Add Project';
-        btn.disabled = false;
+        btn.disabled    = false;
       }
     };
 
@@ -425,7 +448,8 @@
       try {
         const snap = await getDocs(collection(db, "projects"));
         if (snap.empty) {
-          list.innerHTML = '<div class="no-messages">📭 No projects yet.</div>';
+          list.innerHTML =
+            '<div class="no-messages">📭 No projects yet.</div>';
           return;
         }
         list.innerHTML = '';
@@ -457,7 +481,7 @@
     // SKILLS
     // ══════════════════════════════
     window.addSkill = async () => {
-      const icon     = document.getElementById('s-icon').value.trim()  || '⚡';
+      const icon     = document.getElementById('s-icon').value.trim() || '⚡';
       const name     = document.getElementById('s-name').value.trim();
       const category = document.getElementById('s-category').value;
       const level    = document.getElementById('s-level').value;
@@ -467,7 +491,7 @@
 
       const btn = document.getElementById('s-btn');
       btn.textContent = 'Adding...';
-      btn.disabled = true;
+      btn.disabled    = true;
 
       try {
         await addDoc(collection(db, "skills"), {
@@ -477,15 +501,17 @@
         });
         document.getElementById('s-success').style.display = 'block';
         document.getElementById('s-error').style.display   = 'none';
-        setTimeout(() => document.getElementById('s-success').style.display = 'none', 3000);
-        ['s-icon','s-name'].forEach(id => document.getElementById(id).value = '');
+        setTimeout(() =>
+          document.getElementById('s-success').style.display = 'none', 3000);
+        ['s-icon','s-name'].forEach(id =>
+          document.getElementById(id).value = '');
         loadSkills();
       } catch (err) {
         document.getElementById('s-error').style.display = 'block';
         console.error(err);
       } finally {
         btn.textContent = 'Add Skill';
-        btn.disabled = false;
+        btn.disabled    = false;
       }
     };
 
@@ -525,41 +551,46 @@
     // ══════════════════════════════
     // ACHIEVEMENTS
     // ══════════════════════════════
-     window.addAchievement = async () => {
-      const tag   = document.getElementById('a-tag').value.trim()   || 'Achievement';
-      const year  = document.getElementById('a-year').value.trim()  || '';
-      const title = document.getElementById('a-title').value.trim();
-      const desc  = document.getElementById('a-desc').value.trim();
-      const org   = document.getElementById('a-org').value.trim()   || '';
-      const imgUrl= document.getElementById('a-img').value.trim()   || '';
-      const file  = document.getElementById('a-img-file').files[0];
+window.addAchievement = async () => {
+      const category = document.getElementById('a-category').value;
+      const tag      = document.getElementById('a-tag').value.trim()   || 'Certificate';
+      const title    = document.getElementById('a-title').value.trim();
+      const year     = document.getElementById('a-year').value.trim()  || '';
+      const desc     = document.getElementById('a-desc').value.trim();
+      const org      = document.getElementById('a-org').value.trim()   || '';
+      const imgUrl   = document.getElementById('a-img').value.trim()   || '';
+      const file     = document.getElementById('a-img-file').files[0];
 
-      if (!title || !desc) { alert('Title and description are required!'); return; }
+      if (!title || !desc) {
+        alert('Title and description are required!');
+        return;
+      }
 
       const btn = document.getElementById('a-btn');
       btn.textContent = file ? 'Uploading...' : 'Adding...';
-      btn.disabled = true;
+      btn.disabled    = true;
 
       try {
         let finalImg = imgUrl;
 
-        // Upload file to Firebase Storage if selected
         if (file) {
-          const fileRef = ref(storage, `achievements/${Date.now()}_${file.name}`);
+          const fileRef = ref(storage,
+            `achievements/${Date.now()}_${file.name}`);
           await uploadBytes(fileRef, file);
           finalImg = await getDownloadURL(fileRef);
         }
 
         await addDoc(collection(db, "achievements"), {
-          tag, year, title, desc, org,
+          category, tag, title, year, desc, org,
           img: finalImg || '',
           createdAt: serverTimestamp()
         });
 
         document.getElementById('a-success').style.display = 'block';
         document.getElementById('a-error').style.display   = 'none';
-        setTimeout(() => document.getElementById('a-success').style.display = 'none', 3000);
-        ['a-tag','a-year','a-title','a-desc','a-org','a-img']
+        setTimeout(() =>
+          document.getElementById('a-success').style.display = 'none', 3000);
+        ['a-tag','a-title','a-year','a-desc','a-org','a-img']
           .forEach(id => document.getElementById(id).value = '');
         document.getElementById('a-img-file').value = '';
         loadAchievements();
@@ -569,7 +600,7 @@
         console.error(err);
       } finally {
         btn.textContent = 'Add Achievement';
-        btn.disabled = false;
+        btn.disabled    = false;
       }
     };
 
@@ -578,7 +609,8 @@
       try {
         const snap = await getDocs(collection(db, "achievements"));
         if (snap.empty) {
-          list.innerHTML = '<div class="no-messages">📭 No achievements yet.</div>';
+          list.innerHTML =
+            '<div class="no-messages">📭 No achievements yet.</div>';
           return;
         }
         list.innerHTML = '';
@@ -595,7 +627,7 @@
                    </div>`
                 : `<div class="item-icon">🏆</div>`}
               <div class="item-info">
-                <span class="item-tag">${d.tag} — ${d.year}</span>
+                <span class="item-tag">${d.category || d.tag} — ${d.year}</span>
                 <h4>${d.title}</h4>
                 <p>${d.org || ''}</p>
               </div>
