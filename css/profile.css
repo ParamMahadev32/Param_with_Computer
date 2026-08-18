@@ -1,48 +1,46 @@
 /* profile.css */
 
-.page-hero {
+/* PROFILE HERO */
+.profile-hero {
+  position: relative;
   text-align: center;
-  padding: 80px 24px 40px;
-  animation: fadeSlideUp 0.6s ease both;
-}
-
-.page-hero .tag { margin-inline: auto; }
-.page-hero h1   { font-size: 2.8rem; margin-bottom: 14px; }
-.page-hero p    { color: #666; font-size: 1.05rem; max-width: 480px; margin-inline: auto; }
-
-/* WRAPPER */
-.profile-wrapper {
-  max-width: 720px;
-  margin-inline: auto;
-  padding: 20px 24px 100px;
+  padding: 60px 24px 0;
+  overflow: hidden;
+  min-height: 420px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-/* PROFILE TOP CARD */
-.profile-top {
-  display: flex;
   align-items: center;
-  gap: 28px;
-  animation: fadeSlideUp 0.6s ease both;
 }
 
-/* AVATAR */
-.avatar {
-  width: 90px;
-  height: 90px;
+/* CIRCLE AVATAR */
+.avatar-wrapper {
+  position: relative;
+  z-index: 10;
+  transition: transform 0.05s linear, opacity 0.05s linear;
+  transform-origin: top center;
+  margin-bottom: 20px;
+}
+
+.avatar-ring {
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   overflow: hidden;
-  border: 3px solid var(--clr-primary-border);
-  flex-shrink: 0;
+  border: 4px solid var(--clr-primary);
+  box-shadow: 0 0 0 6px var(--clr-primary-light),
+              var(--shadow-card);
   background: var(--clr-primary-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.avatar img {
+.avatar-ring img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: top;
+  display: block;
 }
 
 .avatar-fallback {
@@ -51,44 +49,79 @@
   height: 100%;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--clr-primary);
 }
 
-/* NAME BLOCK */
-.profile-name-block {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+/* FULL PHOTO REVEAL */
+.photo-reveal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.85);
+  transition: transform 0.05s linear, opacity 0.05s linear;
 }
 
-.profile-name-block h2 {
-  font-size: 1.4rem;
+.photo-reveal img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 248, 242, 0.1) 0%,
+    rgba(255, 248, 242, 0.7) 70%,
+    rgba(255, 248, 242, 1) 100%
+  );
+}
+
+/* HERO INFO */
+.hero-info {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 40px;
+  animation: fadeSlideUp 0.7s ease both;
+}
+
+.hero-info h1 {
+  font-size: 2rem;
   font-weight: 700;
   color: #111;
 }
 
-.profile-name-block .tag {
-  margin: 0;
-  width: fit-content;
-}
+.hero-info .tag { margin: 0; }
 
 /* SOCIAL LINKS */
 .social-links {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: 4px;
+  justify-content: center;
+  margin-top: 6px;
 }
 
 .social-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 14px;
+  padding: 8px 16px;
   border-radius: var(--radius-md);
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 600;
   background: var(--clr-primary-light);
   border: 1px solid var(--clr-primary-border);
@@ -109,6 +142,18 @@
 
 .social-btn.linkedin:hover {
   background: rgba(0, 119, 181, 0.16);
+}
+
+/* PROFILE WRAPPER */
+.profile-wrapper {
+  max-width: 720px;
+  margin-inline: auto;
+  padding: 0 24px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  z-index: 10;
 }
 
 /* SECTION CARDS */
@@ -150,71 +195,179 @@
   color: #111;
 }
 
-/* EDUCATION LIST */
-.edu-list {
+/* ══════════════════════════════
+   EDUCATION TIMELINE
+   ══════════════════════════════ */
+
+.edu-timeline {
   display: flex;
   flex-direction: column;
   gap: 0;
-  padding-left: 8px;
-  border-left: 2px solid var(--clr-primary-border);
 }
 
-.edu-item {
+/* EACH BLOCK */
+.edu-block {
   display: flex;
-  gap: 16px;
-  padding: 0 0 24px 20px;
+  gap: 0;
   position: relative;
 }
 
-.edu-item:last-child {
+/* LEFT — year + dot */
+.edu-year-dot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 110px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.edu-period {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--clr-primary);
+  letter-spacing: 0.5px;
+  text-align: center;
+  margin-bottom: 6px;
+  white-space: nowrap;
+}
+
+.edu-big-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--clr-primary);
+  border: 3px solid var(--clr-bg);
+  box-shadow: 0 0 0 2px var(--clr-primary);
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.edu-block.current .edu-big-dot {
+  background: var(--clr-primary);
+  box-shadow: 0 0 0 3px var(--clr-primary-light),
+              0 0 0 5px var(--clr-primary);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 3px var(--clr-primary-light), 0 0 0 5px var(--clr-primary); }
+  50%       { box-shadow: 0 0 0 6px var(--clr-primary-light), 0 0 0 8px rgba(232,98,26,0.2); }
+}
+
+/* Vertical line between blocks */
+.edu-block:not(:last-child) .edu-year-dot::after {
+  content: '';
+  width: 2px;
+  flex: 1;
+  background: var(--clr-primary-border);
+  margin-top: 6px;
+  min-height: 40px;
+}
+
+/* RIGHT — content */
+.edu-content {
+  flex: 1;
+  padding: 0 0 36px 20px;
+  border-left: 2px solid var(--clr-primary-border);
+  margin-left: -1px;
+}
+
+.edu-block:last-child .edu-content {
   padding-bottom: 0;
 }
 
-.edu-dot {
-  position: absolute;
-  left: -7px;
-  top: 4px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--clr-primary);
-  border: 2px solid var(--clr-bg);
-  flex-shrink: 0;
-}
-
-.edu-info h4 {
-  font-size: 0.95rem;
-  font-weight: 600;
+.edu-content h4 {
+  font-size: 1rem;
+  font-weight: 700;
   color: #111;
   margin-bottom: 4px;
 }
 
 .edu-college {
+  font-size: 0.85rem;
+  color: var(--clr-primary);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.edu-desc {
   font-size: 0.88rem;
   color: #666;
-  margin-bottom: 4px;
+  line-height: 1.7;
+  margin-bottom: 14px;
 }
 
-.edu-year {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--clr-primary);
+/* SUB MILESTONES */
+.edu-milestones {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+  padding-left: 4px;
+  border-left: 2px dashed var(--clr-primary-border);
+}
+
+.edu-milestone {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding-left: 14px;
+  position: relative;
+}
+
+.milestone-dot {
+  position: absolute;
+  left: -5px;
+  top: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
   background: var(--clr-primary-light);
-  padding: 2px 10px;
-  border-radius: 999px;
-  display: inline-block;
+  border: 2px solid var(--clr-primary);
+  flex-shrink: 0;
 }
 
-/* ANIMATION DELAYS */
-.profile-top        { animation-delay: 0.05s; }
-.profile-section:nth-child(2) { animation-delay: 0.15s; }
-.profile-section:nth-child(3) { animation-delay: 0.25s; }
-.profile-section:nth-child(4) { animation-delay: 0.35s; }
+.milestone-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #aaa;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  padding-top: 2px;
+  min-width: 80px;
+}
+
+.edu-milestone p {
+  font-size: 0.85rem;
+  color: #555;
+  line-height: 1.5;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+/* CGPA BADGE */
+.cgpa-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  background: var(--clr-primary);
+  padding: 3px 10px;
+  border-radius: 999px;
+}
 
 /* RESPONSIVE */
 @media (max-width: 600px) {
-  .page-hero h1  { font-size: 2rem; }
-  .profile-top   { flex-direction: column; text-align: center; align-items: center; }
-  .social-links  { justify-content: center; }
-  .profile-name-block .tag { margin-inline: auto; }
+  .hero-info h1    { font-size: 1.6rem; }
+  .avatar-ring     { width: 100px; height: 100px; }
+  .profile-wrapper { padding-inline: 16px; }
+  .edu-year-dot    { width: 80px; }
+  .edu-period      { font-size: 0.65rem; }
+  .milestone-label { min-width: 60px; font-size: 0.65rem; }
+  .edu-content     { padding-left: 14px; }
 }
