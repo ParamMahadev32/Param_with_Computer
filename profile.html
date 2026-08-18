@@ -189,35 +189,32 @@
     <p>© 2026 Ram Mahadev Pandhare</p>
   </footer>
 
+<script>
+  // Header shadow
+  const header = document.querySelector('.header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 10);
+  });
 
-  <script>
-    // Header shadow
-    const header = document.querySelector('.header');
-    window.addEventListener('scroll', () => {
-      header.classList.toggle('scrolled', window.scrollY > 10);
-    });
+  // Photo reveal on scroll
+  const avatarWrapper = document.getElementById('avatar-wrapper');
+  const photoReveal   = document.getElementById('photo-reveal');
 
-    // Photo reveal on scroll
-    const avatarWrapper = document.getElementById('avatar-wrapper');
-    const photoReveal   = document.getElementById('photo-reveal');
+  window.addEventListener('scroll', () => {
+    const scrollY   = window.scrollY;
+    const maxScroll = 250;
+    const progress  = Math.min(scrollY / maxScroll, 1);
 
-    window.addEventListener('scroll', () => {
-      const scrollY   = window.scrollY;
-      const maxScroll = 300;
-      const progress  = Math.min(scrollY / maxScroll, 1);
+    // Avatar shrinks and fades out
+    avatarWrapper.style.transform = `scale(${1 - progress * 0.4})`;
+    avatarWrapper.style.opacity   = `${1 - progress}`;
 
-      // Avatar shrinks and fades out
-      const avatarScale   = 1 - progress * 0.3;
-      const avatarOpacity = 1 - progress;
-      avatarWrapper.style.transform = `scale(${avatarScale})`;
-      avatarWrapper.style.opacity   = avatarOpacity;
-
-      // Full photo fades and scales in
-      photoReveal.style.opacity   = progress;
-      photoReveal.style.transform =
-        `scale(${0.85 + progress * 0.15})`;
-    });
-  </script>
+    // Full photo fades in
+    photoReveal.style.opacity        = progress;
+    photoReveal.style.pointerEvents  = progress > 0.5 ? 'auto' : 'none';
+    photoReveal.style.transform      = `scale(${0.92 + progress * 0.08})`;
+  });
+</script>
 
 </body>
 </html>
