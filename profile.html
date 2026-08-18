@@ -196,23 +196,38 @@
     header.classList.toggle('scrolled', window.scrollY > 10);
   });
 
-  // Photo reveal on scroll
+  // Photo reveal on scroll UP from top
   const avatarWrapper = document.getElementById('avatar-wrapper');
   const photoReveal   = document.getElementById('photo-reveal');
 
+  let lastScrollY = 0;
+
   window.addEventListener('scroll', () => {
     const scrollY   = window.scrollY;
-    const maxScroll = 250;
-    const progress  = Math.min(scrollY / maxScroll, 1);
+    const maxScroll = 200;
 
-    // Avatar shrinks and fades out
-    avatarWrapper.style.transform = `scale(${1 - progress * 0.4})`;
-    avatarWrapper.style.opacity   = `${1 - progress}`;
+    // Scrolling UP from top — reveal photo
+    if (scrollY < maxScroll) {
+      const progress = 1 - (scrollY / maxScroll);
 
-    // Full photo fades in
-    photoReveal.style.opacity        = progress;
-    photoReveal.style.pointerEvents  = progress > 0.5 ? 'auto' : 'none';
-    photoReveal.style.transform      = `scale(${0.92 + progress * 0.08})`;
+      // Avatar shows when at top, hides when scrolled
+      avatarWrapper.style.transform = `scale(${0.7 + progress * 0.3})`;
+      avatarWrapper.style.opacity   = `${progress}`;
+
+      // Photo reveals when scrolled to top
+      photoReveal.style.opacity       = `${1 - progress}`;
+      photoReveal.style.transform     = `translateY(${-100 + (1 - progress) * 100}%)`;
+      photoReveal.style.pointerEvents = progress < 0.3 ? 'auto' : 'none';
+
+    } else {
+      avatarWrapper.style.opacity   = '0';
+      avatarWrapper.style.transform = 'scale(0.7)';
+      photoReveal.style.opacity     = '1';
+      photoReveal.style.transform   = 'translateY(0%)';
+      photoReveal.style.pointerEvents = 'auto';
+    }
+
+    lastScrollY = scrollY;
   });
 </script>
 
