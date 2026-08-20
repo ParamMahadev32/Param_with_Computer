@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume | Ram Mahadev Pandhare</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── RESET ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f5f5f5;
+      color: #111;
+      min-height: 100vh;
+      padding: 30px 16px;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── DOWNLOAD BUTTON ── */
+    .download-bar {
+      max-width: 800px;
+      margin: 0 auto 20px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .download-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 22px;
+      background: #e8621a;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .download-btn:hover {
+      background: #cf5515;
+      transform: translateY(-1px);
+    }
+
+    /* ── RESUME PAPER ── */
+    .resume {
+      max-width: 800px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.10);
+      overflow: hidden;
+    }
+
+    /* ── HEADER ── */
+    .resume-header {
+      background: linear-gradient(135deg, #e8621a 0%, #f59044 100%);
+      padding: 40px 48px 36px;
+      color: #fff;
+    }
+
+    .resume-header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      margin-bottom: 4px;
+      color: #fff;
+    }
+
+    .resume-header .role {
+      font-size: 1rem;
+      font-weight: 500;
+      opacity: 0.9;
+      margin-bottom: 20px;
+    }
+
+    .contact-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.82rem;
+      opacity: 0.95;
+      font-weight: 500;
+    }
+
+    .contact-item a {
+      color: #fff;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    /* ── BODY ── */
+    .resume-body {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      min-height: 900px;
+    }
+
+    /* ── LEFT SIDEBAR ── */
+    .sidebar {
+      background: #fafafa;
+      border-right: 1px solid #eee;
+      padding: 32px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* ── RIGHT MAIN ── */
+    .main {
+      padding: 32px 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* ── SECTION TITLE ── */
+    .section-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #e8621a;
+      border-bottom: 2px solid #ffe5cc;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+
+    /* ── ABOUT ── */
+    .about-text {
+      font-size: 0.85rem;
+      color: #444;
+      line-height: 1.75;
+    }
+
+    /* ── SKILLS ── */
+    .skill-item {
+      margin-bottom: 10px;
+    }
+
+    .skill-name {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #222;
+      margin-bottom: 4px;
+    }
+
+    .skill-level-text {
+      font-weight: 400;
+      color: #999;
+      font-size: 0.75rem;
+    }
+
+    .skill-bar {
+      height: 5px;
+      background: #f0e0d0;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #e8621a, #f59044);
+      border-radius: 999px;
+    }
+
+    /* ── LANGUAGES ── */
+    .lang-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.82rem;
+      margin-bottom: 8px;
+    }
+
+    .lang-name { font-weight: 600; color: #222; }
+
+    .lang-dots {
+      display: flex;
+      gap: 4px;
+    }
+
+    .lang-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #e0e0e0;
+    }
+
+    .lang-dot.filled { background: #e8621a; }
+
+    /* ── INTERESTS ── */
+    .interest-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .interest-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 10px;
+      background: #fff4ee;
+      border: 1px solid #ffd5b8;
+      color: #e8621a;
+      border-radius: 999px;
+    }
+
+    /* ── EDUCATION ── */
+    .edu-item {
+      margin-bottom: 18px;
+      padding-left: 16px;
+      border-left: 3px solid #ffe5cc;
+      position: relative;
+    }
+
+    .edu-item::before {
+      content: '';
+      position: absolute;
+      left: -6px;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e8621a;
+    }
+
+    .edu-item:last-child { margin-bottom: 0; }
+
+    .edu-degree {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #111;
+      margin-bottom: 2px;
+    }
+
+    .edu-school {
+      font-size: 0.82rem;
+      color: #e8621a;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .edu-year {
+      font-size: 0.75rem;
+      color: #999;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .edu-note {
+      font-size: 0.8rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .cgpa {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: #e8621a;
+      color: #fff;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-top: 4px;
+    }
+
+    /* ── EXPERIENCE / PROJECTS ── */
+    .project-item {
+      margin-bottom: 20px;
+      padding-left: 16px;
+      border-left: 3px solid #ffe5cc;
+      position: relative;
+    }
+
+    .project-item::before {
+      content: '';
+      position: absolute;
+      left: -6px;
+      top: 4px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #e8621a;
+    }
+
+    .project-item:last-child { margin-bottom: 0; }
+
+    .project-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 3px;
+    }
+
+    .project-name {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #111;
+    }
+
+    .project-type {
+      font-size: 0.7rem;
+      font-weight: 700;
+      background: #fff4ee;
+      color: #e8621a;
+      border: 1px solid #ffd5b8;
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+
+    .project-desc {
+      font-size: 0.82rem;
+      color: #555;
+      line-height: 1.6;
+      margin-bottom: 6px;
+    }
+
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .tech-chip {
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: #f5f5f5;
+      color: #555;
+      padding: 2px 8px;
+      border-radius: 4px;
+      border: 1px solid #e0e0e0;
+    }
+
+    /* ── ACHIEVEMENTS ── */
+    .achievement-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 10px;
+      align-items: flex-start;
+    }
+
+    .achievement-item:last-child { margin-bottom: 0; }
+
+    .achievement-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #e8621a;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+
+    .achievement-text {
+      font-size: 0.82rem;
+      color: #444;
+      line-height: 1.5;
+    }
+
+    .achievement-text strong {
+      color: #111;
+      font-weight: 600;
+    }
+
+    /* ── PRINT ── */
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .download-bar { display: none; }
+
+      .resume {
+        box-shadow: none;
+        border-radius: 0;
+        max-width: 100%;
+      }
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .resume-header  { padding: 28px 24px; }
+      .resume-header h1 { font-size: 1.5rem; }
+      .resume-body    { grid-template-columns: 1fr; }
+      .sidebar        { border-right: none; border-bottom: 1px solid #eee; }
+      .main           { padding: 24px; }
+      .sidebar        { padding: 24px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- DOWNLOAD BAR -->
+  <div class="download-bar">
+    <button class="download-btn" onclick="window.print()">
+      ⬇️ Download PDF
+    </button>
+  </div>
+
+
+  <!-- RESUME -->
+  <div class="resume">
+
+    <!-- HEADER -->
+    <div class="resume-header">
+      <h1>Ram Mahadev Pandhare</h1>
+      <p class="role">Software Developer · BTech Computer Science</p>
+      <div class="contact-row">
+        <div class="contact-item">
+          📧 <a href="mailto:parammahadev21@gmail.com">parammahadev21@gmail.com</a>
+        </div>
+        <div class="contact-item">
+          📞 +91 XXXXX XXXXX
+        </div>
+        <div class="contact-item">
+          🐙 <a href="https://github.com/ParamMahadev32" target="_blank">github.com/ParamMahadev32</a>
+        </div>
+        <div class="contact-item">
+          💼 <a href="https://www.linkedin.com/in/ram-mahadev-pandhare-724492382" target="_blank">LinkedIn</a>
+        </div>
+        <div class="contact-item">
+          📍 Pune, Maharashtra, India
+        </div>
+      </div>
+    </div>
+
+
+    <!-- BODY -->
+    <div class="resume-body">
+
+      <!-- ── LEFT SIDEBAR ── -->
+      <div class="sidebar">
+
+        <!-- SKILLS -->
+        <div>
+          <p class="section-title">Technical Skills</p>
+
+          <div class="skill-item">
+            <div class="skill-name">
+              HTML / CSS
+              <span class="skill-level-text">Expert</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width:95%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">
+              JavaScript
+              <span class="skill-level-text">Advanced</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width:80%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">
+              Python
+              <span class="skill-level-text">Advanced</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width:85%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">
+              Firebase
+              <span class="skill-level-text">Intermediate</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width:70%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">
+              AWS
+              <span class="skill-level-text">Intermediate</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width:70%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">
+              Machine Learning
+              <span class="skill-level-text">Intermediate</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width:65%"></div>
+            </div>
+          </div>
+
+          <div class="skill-item">
+            <div class="skill-name">
+              Git / GitHub
+              <span class="skill-level-text">Advanced</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-fill" style="width:82%"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- LANGUAGES -->
+        <div>
+          <p class="section-title">Languages</p>
+
+          <div class="lang-item">
+            <span class="lang-name">English</span>
+            <div class="lang-dots">
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot"></div>
+            </div>
+          </div>
+
+          <div class="lang-item">
+            <span class="lang-name">Hindi</span>
+            <div class="lang-dots">
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+            </div>
+          </div>
+
+          <div class="lang-item">
+            <span class="lang-name">Marathi</span>
+            <div class="lang-dots">
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+              <div class="lang-dot filled"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- INTERESTS -->
+        <div>
+          <p class="section-title">Interests</p>
+          <div class="interest-tags">
+            <span class="interest-tag">🤖 AI & ML</span>
+            <span class="interest-tag">🌐 Web Dev</span>
+            <span class="interest-tag">☁️ Cloud</span>
+            <span class="interest-tag">🔒 Security</span>
+            <span class="interest-tag">📊 Data Science</span>
+            <span class="interest-tag">📱 UI/UX</span>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- ── RIGHT MAIN ── -->
+      <div class="main">
+
+        <!-- ABOUT -->
+        <div>
+          <p class="section-title">About Me</p>
+          <p class="about-text">
+            Passionate Software Developer and BTech Computer Science student at
+            MIT Academy of Engineering, Pune. Focused on building modern web
+            applications and intelligent systems. I love turning ideas into real
+            digital products using clean code and thoughtful design. Constantly
+            exploring new technologies — from cloud computing and AI to frontend
+            design — with the goal of creating meaningful experiences for real users.
+          </p>
+        </div>
+
+        <!-- EDUCATION -->
+        <div>
+          <p class="section-title">Education</p>
+
+          <div class="edu-item">
+            <p class="edu-degree">Bachelor of Technology — Computer Science</p>
+            <p class="edu-school">MIT Academy of Engineering, Alandi, Pune</p>
+            <p class="edu-year">2025 — 2029</p>
+            <p class="edu-note">Currently pursuing graduation with strong interest in development, AI and technical learning.</p>
+            <span class="cgpa">🏆 Sem 1: CGPA 8.90 / 10</span>
+            <span class="cgpa">🏆 Sem 2: CGPA 8.83 / 10</span>
+          </div>
+
+          <div class="edu-item">
+            <p class="edu-degree">HSC — Science (12th)</p>
+            <p class="edu-school">Bharat Children's Academy, Walchandnagar</p>
+            <p class="edu-year">2022 — 2024</p>
+            <p class="edu-note">Completed Higher Secondary with focus on Mathematics, Physics and Computer Science.</p>
+          </div>
+
+          <div class="edu-item">
+            <p class="edu-degree">SSC (10th Standard)</p>
+            <p class="edu-school">B.J Date Prashala, Natepute 413109</p>
+            <p class="edu-year">2016 — 2022</p>
+            <p class="edu-note">Completed Secondary Education with strong academic foundation.</p>
+          </div>
+
+        </div>
+
+        <!-- PROJECTS -->
+        <div>
+          <p class="section-title">Projects</p>
+
+          <div class="project-item">
+            <div class="project-top">
+              <span class="project-name">Finance System — Bachat Gat</span>
+              <span class="project-type">Software</span>
+            </div>
+            <p class="project-desc">
+              Advanced fintech platform to digitize and automate financial operations
+              of traditional Self-Help Groups. Features secure authentication and
+              QR-based payment tracking.
+            </p>
+            <div class="project-tech">
+              <span class="tech-chip">HTML</span>
+              <span class="tech-chip">CSS</span>
+              <span class="tech-chip">JavaScript</span>
+              <span class="tech-chip">Firebase</span>
+            </div>
+          </div>
+
+          <div class="project-item">
+            <div class="project-top">
+              <span class="project-name">Portfolio Website</span>
+              <span class="project-type">Web</span>
+            </div>
+            <p class="project-desc">
+              Modern responsive portfolio with admin dashboard, Firebase integration
+              for dynamic content management of projects, skills and achievements.
+            </p>
+            <div class="project-tech">
+              <span class="tech-chip">HTML</span>
+              <span class="tech-chip">CSS</span>
+              <span class="tech-chip">JavaScript</span>
+              <span class="tech-chip">Firebase</span>
+              <span class="tech-chip">GitHub Pages</span>
+            </div>
+          </div>
+
+          <div class="project-item">
+            <div class="project-top">
+              <span class="project-name">URL Guard</span>
+              <span class="project-type">Security</span>
+            </div>
+            <p class="project-desc">
+              Python terminal URL security scanner that detects malicious links
+              and phishing attempts using threat intelligence APIs.
+            </p>
+            <div class="project-tech">
+              <span class="tech-chip">Python</span>
+              <span class="tech-chip">API</span>
+              <span class="tech-chip">Security</span>
+            </div>
+          </div>
+
+          <!-- ADD MORE PROJECTS HERE -->
+
+        </div>
+
+        <!-- ACHIEVEMENTS -->
+        <div>
+          <p class="section-title">Certifications & Achievements</p>
+
+          <div class="achievement-item">
+            <div class="achievement-dot"></div>
+            <p class="achievement-text">
+              <strong>Python Essentials 1 & 2</strong> — Cisco Networking Academy
+              via MIT Academy of Engineering · 2026
+            </p>
+          </div>
+
+          <div class="achievement-item">
+            <div class="achievement-dot"></div>
+            <p class="achievement-text">
+              <strong>MSCIT Certification</strong> — Completed with 97% marks · 2024
+            </p>
+          </div>
+
+          <!-- ADD MORE ACHIEVEMENTS HERE -->
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>
