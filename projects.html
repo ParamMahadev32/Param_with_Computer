@@ -67,6 +67,27 @@
       measurementId: "G-7PRWGR9K5K"
     };
 
+    // ── Convert markdown to clean HTML ──
+    function parseMarkdown(text) {
+      if (!text) return '';
+      return text
+        // ### Heading
+        .replace(/^###\s(.+)$/gm,
+          '<p class="md-heading">$1</p>')
+        // **bold**
+        .replace(/\*\*(.+?)\*\*/g,
+          '<strong>$1</strong>')
+        // * bullet point
+        .replace(/^\*\s(.+)$/gm,
+          '<li>$1</li>')
+        // wrap <li> in <ul>
+        .replace(/(<li>[\s\S]*?<\/li>)/g,
+          '<ul class="md-list">$1</ul>')
+        // line breaks
+        .replace(/\n\n/g, '</p><p class="md-para">')
+        .replace(/\n/g, '<br>');
+    }
+
     async function loadProjects() {
       const loading = document.getElementById('projects-loading');
       const empty   = document.getElementById('projects-empty');
@@ -91,31 +112,53 @@
           const card = document.createElement('div');
           card.className = 'project-card';
           card.style.animationDelay = `${i * 0.1}s`;
+
+          // Parse description
+          const parsedDesc = parseMarkdown(d.desc || '');
+
           card.innerHTML = `
             <div class="project-icon">${d.icon || '🚀'}</div>
             <div class="project-info">
               <span class="project-tag">${d.tag || 'Project'}</span>
               <h2>${d.name}</h2>
-              <p>${d.desc}</p>
+              <div class="project-desc">${parsedDesc}</div>
             </div>
             <div class="project-links">
               ${d.demo && d.demo !== '#'
-                ? `<a href="${d.demo}" target="_blank" class="btn">Live Demo</a>`
+                ? `<a href="${d.demo}" target="_blank" class="btn">
+                     Live Demo
+                   </a>`
                 : ''}
               ${d.github && d.github !== '#'
-                ? `<a href="${d.github}" target="_blank" class="btn-outline">GitHub</a>`
+                ? `<a href="${d.github}" target="_blank" class="btn-outline">
+                     GitHub
+                   </a>`
                 : ''}
             </div>
           `;
+
+          // Expand/collapse long descriptions
+          const descEl = card.querySelector('.project-desc');
+          if (descEl.textContent.length > 200) {
+            descEl.classList.add('collapsed');
+            const toggle = document.createElement('button');
+            toggle.className   = 'read-more-btn';
+            toggle.textContent = 'Read more ↓';
+            toggle.onclick = () => {
+              const isCollapsed = descEl.classList.toggle('collapsed');
+              toggle.textContent = isCollapsed ? 'Read more ↓' : 'Read less ↑';
+            };
+            card.querySelector('.project-info').appendChild(toggle);
+          }
+
           grid.appendChild(card);
         });
 
       } catch (err) {
-        const loading = document.getElementById('projects-loading');
         loading.innerHTML = `
           <div style="color:#c62828;background:#fff5f5;border:1px solid #ffcdd2;
                       padding:16px;border-radius:10px;font-size:0.9rem;
-                      max-width:500px;margin:0 auto;text-align:left;">
+                      max-width:500px;margin:0 auto;">
             ❌ Error: <strong>${err.code || 'unknown'}</strong><br>${err.message}
           </div>`;
       }
